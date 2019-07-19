@@ -51,3 +51,6 @@ clean:
 	@echo Removing Object Files $(wildcard $(OBJS_DIR)/*.o)
 	@rm $(OBJS_DIR)/*.o 
 	@echo Removing $(ELFILE)
+
+run: $(OBJS_DIR)/$(ELFILE)
+	$(EM_DIR)/$(EM) $(EMFLAGS)
