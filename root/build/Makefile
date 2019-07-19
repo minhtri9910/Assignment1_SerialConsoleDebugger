@@ -1,4 +1,4 @@
-TARGET = kernel17.img
+TARGET = kernel7.img
 ELFILE = myos.elf
 CC = arm-none-eabi-gcc.exe
 OC = arm-none-eabi-objcopy.exe
