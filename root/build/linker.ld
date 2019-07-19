@@ -33,7 +33,7 @@ SECTIONS
     __bss_start = .;
     .bss :
     {
-        bss = .;
+        /*bss = .;*/
         *(.bss)
     }
     . = ALIGN(4096); /* align to page size */
