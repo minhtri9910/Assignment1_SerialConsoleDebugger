@@ -11,9 +11,9 @@ CFLAGS = -mcpu=$(CPU) -fpic -ffreestanding -Wall
 #Flags for emulator
 EMFLAGS = -m $(MEM) -M raspi2 -serial stdio -kernel $(OBJS_DIR)/$(ELFILE) 
 #Flags for compiling C source file, -g: debugging symbol, -02: optimized level
-CSRCFLAGS = -g -02 -Wall -Wextra
+CSRCFLAGS = -g -O2 -Wall -Wextra
 #Flags for linking stage of the build
-LFLAGS = -ffreestanding -02 -nostdlib
+LFLAGS = -ffreestanding -O2 -nostdlib
 
 SRC_CMN_DIR = ../source/common
 SRC_KER_DIR = ../source/kernel
