@@ -1,0 +1,49 @@
+TARGET = kernel17.img
+ELFILE = myos.elf
+CC = arm-none-eabi-gcc.exe
+OC = arm-none-eabi-objcopy.exe
+EM = qemu-system-arm.exe
+CPU = cortex-a7
+MEM = 1024
+
+CFLAGS = -mcpu=$(CPU) -fpic -ffreestanding -Wall 
+EMFLAGS = -m $(MEM) -M raspi2 -serial stdio -kernel $(OBJS_DIR)/$(ELFILE) 
+CSRCFLAGS = -g -02 -Wall -Wextra
+LFLAGS = -ffreestanding -02 -nostdlib
+
+SRC_CMN_DIR = ../source/common
+SRC_KER_DIR = ../source/kernel
+INC_CMN_DIR = ../include/common
+INC_KER_DIR = ../include/kernel
+OBJS_DIR = objects
+EM_DIR = C:\Program Files\qemu
+CC_DIR = C:\Program Files (x86)\GNU Tools ARM Embedded\8 2019-q3-update\bin
+
+#Complie all assembly source files in kernel directory
+$(OBJS_DIR)/%.o : $(SRC_KER_DIR)/%.s
+	@echo Compiling Assembler Source File $<
+	@$(CC_DIR)/$(CC) $(CFLAGS) -c $< -o $@
+
+#Compile all C source files in common directory
+$(OBJS_DIR)/%.o : $(SRC_CMN_DIR)/%.c $(INC_CMN_DIR)/%.h
+	@echo Compiling C source file $< in common directory
+	@$(CC_DIR)/$(CC) $(CFLAGS) -I$(INC_CMN_DIR) -I$(INC_KER_DIR) -c $< -o $@ $(CSRCFLAGS)
+
+#Link all object files
+$(OBJS_DIR)/$(ELFILE) : $(OBJS_DIR)/boot.o #$(OBJS_DIR)/object.o
+	@echo Lining Objects Files: $^
+	@$(CC_DIR)/$(CC) -T linker.ld -o $(OBJS_DIR)/$(ELFILE) $(LFLAGS) $^
+	@echo Extensible Linkable Format File: $@ created
+
+#Convert elf file to img file
+$(TARGET) : $(OBJS_DIR)/$(ELFILE)
+	@$(CC_DIR)/$(OC) $(OBJS_DIR)/$(ELFILE) -O binary $(OBJS_DIR)/$(TARGET)
+	@echo Kernel Image File: $(TARGET) created
+
+#Target to call from the command line
+all: $(TARGET)
+
+clean:
+	@echo Removing Object Files $(wildcard $(OBJS_DIR)/*.o)
+	@rm $(OBJS_DIR)/*.o 
+	@echo Removing $(ELFILE)
