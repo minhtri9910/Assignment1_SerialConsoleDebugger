@@ -33,8 +33,13 @@ $(OBJS_DIR)/%.o : $(SRC_CMN_DIR)/%.c $(INC_CMN_DIR)/%.h
 	@echo Compiling C source file $< in common directory
 	@$(CC_DIR)/$(CC) $(CFLAGS) -I$(INC_CMN_DIR) -I$(INC_KER_DIR) -c $< -o $@ $(CSRCFLAGS)
 
+#Compile all C source files in kernel directory, -I: include header files, $<: leftmost current dependency. 
+$(OBJS_DIR)/%.o : $(SRC_KER_DIR)/%.c $(INC_KER_DIR)/%.h
+	@echo Compiling C source file $< in common directory
+	@$(CC_DIR)/$(CC) $(CFLAGS) -I$(INC_CMN_DIR) -I$(INC_KER_DIR) -c $< -o $@ $(CSRCFLAGS)
+
 #Link all object files
-$(OBJS_DIR)/$(ELFILE) : $(OBJS_DIR)/boot.o #$(OBJS_DIR)/object.o
+$(OBJS_DIR)/$(ELFILE) : $(OBJS_DIR)/boot.o $(OBJS_DIR)/stdio.o $(OBJS_DIR)/stdlib.o $(OBJS_DIR)/kernel.o $(OBJS_DIR)/uart.o
 	@echo Lining Objects Files: $^
 	@$(CC_DIR)/$(CC) -T linker.ld -o $(OBJS_DIR)/$(ELFILE) $(LFLAGS) $^
 	@echo Extensible Linkable Format File: $@ created
@@ -49,8 +54,11 @@ all: $(TARGET)
 
 clean:
 	@echo Removing Object Files $(wildcard $(OBJS_DIR)/*.o)
-	@rm $(OBJS_DIR)/*.o 
+	@rm  $(OBJS_DIR)/*.o 
 	@echo Removing $(ELFILE)
+
+.PHONY: clean run
 
 run: $(OBJS_DIR)/$(ELFILE)
 	$(EM_DIR)/$(EM) $(EMFLAGS)
+
