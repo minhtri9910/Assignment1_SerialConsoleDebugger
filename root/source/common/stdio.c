@@ -1,6 +1,6 @@
-#include <kernel/uart.h>
-#include <common/stdio.h>
-#include <common/stdlib.h>
+#include "../../include/kernel/uart.h"
+#include "../../include/common/stdio.h"
+#include "../../include/common/stdlib.h"
 
 char getc(void) {
     return uart_getc();

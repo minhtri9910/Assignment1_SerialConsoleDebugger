@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
-#include <kernel/uart.h>
-#include <common/stdlib.h>
+#include "../../include/kernel/uart.h"
+#include "../../include/common/stdlib.h"
 
 // Memory-Mapped I/O output
 void mmio_write(uint32_t reg, uint32_t data)
@@ -33,11 +33,11 @@ void uart_init()
     // Setup the GPIO pin 14 && 15.
     // Disable pull up/down for all GPIO pins & delay for 150 cycles.
     mmio_write(GPPUD, 0x00000000);
-    delay(150);
+    // delay(150);
 
     // Disable pull up/down for pin 14,15 & delay for 150 cycles.
     mmio_write(GPPUDCLK0, (1 << 14) | (1 << 15));
-    delay(150);
+    // delay(150);
 
     // Write 0 to GPPUDCLK0 to make it take effect.
     mmio_write(GPPUDCLK0, 0x00000000);

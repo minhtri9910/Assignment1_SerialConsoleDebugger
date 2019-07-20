@@ -1,8 +1,8 @@
 #include <stddef.h>
 #include <stdint.h>
-#include <kernel/uart.h>
-#include <common/stdio.h>
-#include <common/stdlib.h>
+#include "../../include/kernel/uart.h"
+#include "../../include/common/stdio.h"
+#include "../../include/common/stdlib.h"
 
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
@@ -14,6 +14,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
     uart_init();
     puts("Hello, kernel World!\n");
+
     while (1) {
         gets(buf,256);
         puts(buf);
