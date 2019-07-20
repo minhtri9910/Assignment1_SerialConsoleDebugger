@@ -1,5 +1,5 @@
-#ifndef STDLIB_H
-#define STDLIB_H
+#ifndef __STDLI__
+#define __STDLI__
 
 void memcpy(void * dest, void * src, int bytes);
 
