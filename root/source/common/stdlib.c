@@ -84,7 +84,7 @@ char* dectohex(int i){
         if ((i%16) < 10)
             cstring[j++] = '0' + (i%16);
         else
-            cstring[j++] = 54 + (i%16);
+            cstring[j++] = 55 + (i%16);
 
         i /= 16;
     }
