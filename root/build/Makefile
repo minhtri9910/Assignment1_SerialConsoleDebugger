@@ -6,6 +6,8 @@ EM = qemu-system-arm.exe
 CPU = cortex-a7
 MEM = 1024
 
+SHELL = C:/Windows/system32/cmd.exe
+
 #Flags for compiler (for assembly)
 CFLAGS = -mcpu=$(CPU) -fpic -ffreestanding -Wall 
 #Flags for emulator
@@ -54,8 +56,11 @@ all: $(TARGET)
 
 clean:
 	@echo Removing Object Files $(wildcard $(OBJS_DIR)/*.o)
-	@rm  $(OBJS_DIR)/*.o 
+	@del  $(OBJS_DIR)\*.o 
 	@echo Removing $(ELFILE)
+	@del  $(OBJS_DIR)\*.elf 
+	@echo Removing $(TARGET)
+	@del  $(OBJS_DIR)\*.img
 
 .PHONY: clean run
 
