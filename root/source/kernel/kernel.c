@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
+#include "../../include/kernel/kernel.h"
 #include "../../include/kernel/uart.h"
 #include "../../include/common/stdio.h"
 #include "../../include/common/stdlib.h"
