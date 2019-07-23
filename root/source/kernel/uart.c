@@ -4,8 +4,12 @@
 #include "../../include/common/mystdlib.h"
 
 // Memory-Mapped I/O output
+//write 'data' to 'reg'
 void mmio_write(uint32_t reg, uint32_t data)
 {
+    //reg is the address of the corresponding character
+    //(volatile uint32_t*) is used to cast this to a pointer of type uint32_t
+    //assign the value 'data' to reg
     *(volatile uint32_t*)reg = data;
 }
 
@@ -18,9 +22,10 @@ uint32_t mmio_read(uint32_t reg)
 void uart_init()
 {
     uart_control_t control;
+
     // Disable UART0.
     bzero(&control, 4);
-    mmio_write(UART0_CR, control.as_int);
+    mmio_write(UART0_CR, control.as_int); //set all the CR register to 0
 
     // Setup the GPIO pin 14 && 15.
     // Disable pull up/down for all GPIO pins & delay for 150 cycles.
@@ -36,16 +41,6 @@ void uart_init()
 
     // Clear pending interrupts.
     mmio_write(UART0_ICR, 0x7FF);
-
-    // Set integer & fractional part of baud rate.
-    // Divider = UART_CLOCK/(16 * Baud)
-    // Fraction part register = (Fractional part * 64) + 0.5
-    // UART_CLOCK = 3000000; Baud = 115200.
-
-    // Divider = 3000000 / (16 * 115200) = 1.627 = ~1.
-    //mmio_write(UART0_IBRD, 1);
-    // Fractional part register = (.627 * 64) + 0.5 = 40.6 = ~40.
-    //mmio_write(UART0_FBRD, 40);
 
     // Enable FIFO & 8 bit data transmissio (1 stop bit, no parity).
     mmio_write(UART0_LCRH, (1 << 4) | (1 << 5) | (1 << 6));
@@ -64,7 +59,7 @@ void uart_init()
 
 uart_flags_t read_flags(void) {
     uart_flags_t flags;
-    flags.as_int = mmio_read(UART0_FR);
+    flags.as_int = mmio_read(UART0_FR); //read the whole flag register of 32 bits
     return flags;
 }
 

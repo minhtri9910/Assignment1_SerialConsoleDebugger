@@ -7,14 +7,15 @@
 typedef union uart_flags {
     struct
     {
+        //complement of UART clear to send input, the bit is 1 when input is LOW
         uint8_t clear_to_send : 1;
         uint8_t data_set_ready : 1;
         uint8_t data_carrier_detected : 1;
-        uint8_t busy : 1;
-        uint8_t recieve_queue_empty : 1;
-        uint8_t transmit_queue_full : 1;
-        uint8_t recieve_queue_full : 1;
-        uint8_t transmit_queue_empty : 1;
+        uint8_t busy : 1;// if 1, UART is busy transmitting
+        uint8_t recieve_queue_empty : 1;// if 1, the receive queue is empty
+        uint8_t transmit_queue_full : 1;// if 1, the transmit queue is full
+        uint8_t recieve_queue_full : 1;// if 1, the receive queue is full
+        uint8_t transmit_queue_empty : 1;// if 1, the transmit queue is empty
         uint8_t ring_indicator : 1;
         uint32_t padding : 23;
     };
@@ -24,8 +25,8 @@ typedef union uart_flags {
 typedef union uart_control {
     struct
     {
-        uint8_t uart_enabled : 1;
-        uint8_t sir_enabled : 1;
+        uint8_t uart_enabled : 1; //0 - disable UART, 1 - enable UART
+        uint8_t sir_enabled : 1; 
         uint8_t sir_low_power_mode : 1;
         uint8_t reserved : 4;
         uint8_t loop_back_enabled : 1;
@@ -41,13 +42,6 @@ typedef union uart_control {
     };
     uint32_t as_int;
 } uart_control_t;
-
-void mmio_write(uint32_t reg, uint32_t data);
-
-uint32_t mmio_read(uint32_t reg);
-
-// Loop <delay> times in a way that the compiler won't optimize away
-void delay(int32_t count);
 
 enum
 {
@@ -74,6 +68,10 @@ enum
     UART0_ITOP = (UART0_BASE + 0x88),   // Test Control Register
     UART0_TDR = (UART0_BASE + 0x8C),    // Test Data Register
 };
+
+void mmio_write(uint32_t reg, uint32_t data);
+
+uint32_t mmio_read(uint32_t reg);
 
 void uart_init();
 
