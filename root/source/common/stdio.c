@@ -1,6 +1,6 @@
 #include "../../include/kernel/uart.h"
 #include "../../include/common/stdio.h"
-#include "../../include/common/stdlib.h"
+#include "../../include/common/mystdlib.h"
 
 char getc(void) {
     return uart_getc();
@@ -26,7 +26,7 @@ void gets(char * buf, int buflen) {
     }
 
     putc('\n');
-    if (c == '\n') {
+    if (c == '\r') {
         buf[i] = '\0';
     }
     else

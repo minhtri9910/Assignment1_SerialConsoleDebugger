@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "../../include/kernel/uart.h"
-#include "../../include/common/stdlib.h"
+#include "../../include/common/mystdlib.h"
 
 // Memory-Mapped I/O output
 void mmio_write(uint32_t reg, uint32_t data)
@@ -15,14 +15,6 @@ uint32_t mmio_read(uint32_t reg)
     return *(volatile uint32_t*)reg;
 }
 
-// Loop <delay> times in a way that the compiler won't optimize away
-
-// void delay(int32_t count)
-// {
-//     asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
-//             : "=r"(count): [count]"0"(count) : "cc");
-// }
-
 void uart_init()
 {
     uart_control_t control;
@@ -33,11 +25,11 @@ void uart_init()
     // Setup the GPIO pin 14 && 15.
     // Disable pull up/down for all GPIO pins & delay for 150 cycles.
     mmio_write(GPPUD, 0x00000000);
-    // delay(150);
+    delay(150);
 
     // Disable pull up/down for pin 14,15 & delay for 150 cycles.
     mmio_write(GPPUDCLK0, (1 << 14) | (1 << 15));
-    // delay(150);
+    delay(150);
 
     // Write 0 to GPPUDCLK0 to make it take effect.
     mmio_write(GPPUDCLK0, 0x00000000);
@@ -51,9 +43,9 @@ void uart_init()
     // UART_CLOCK = 3000000; Baud = 115200.
 
     // Divider = 3000000 / (16 * 115200) = 1.627 = ~1.
-    mmio_write(UART0_IBRD, 1);
+    //mmio_write(UART0_IBRD, 1);
     // Fractional part register = (.627 * 64) + 0.5 = 40.6 = ~40.
-    mmio_write(UART0_FBRD, 40);
+    //mmio_write(UART0_FBRD, 40);
 
     // Enable FIFO & 8 bit data transmissio (1 stop bit, no parity).
     mmio_write(UART0_LCRH, (1 << 4) | (1 << 5) | (1 << 6));

@@ -1,4 +1,6 @@
-#include "../../include/common/stdlib.h"
+#include <stddef.h>
+#include <stdint.h>
+#include "../../include/common/mystdlib.h"
 
 void memcpy(void * dest, void * src, int bytes) {
     char * d = dest, * s = src;
@@ -111,3 +113,8 @@ char* dectohex(int i){
     return cstring;
 }
 
+// Loop <delay> times in a way that the compiler won't optimize away
+void delay(uint32_t count){
+    asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
+              : "=r"(count) : [count] "0" (count) : "cc");
+}
