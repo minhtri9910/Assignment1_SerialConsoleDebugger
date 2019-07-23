@@ -32,7 +32,7 @@ void gets(char * buf, int buflen) {
     }
 
     putc('\n');
-    if (c == '\r') {
+    if (c == '\r') {//the current 'c' may not reach the '\r'
         buf[i] = '\0';
     }
     else

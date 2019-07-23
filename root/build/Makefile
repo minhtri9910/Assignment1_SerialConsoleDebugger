@@ -77,7 +77,7 @@ clean:
 	@echo Removing $(TARGET)
 	@del  $(OBJS_DIR)\*.img
 
-.PHONY: clean run
+.PHONY: clean run all
 
 run: $(OBJS_DIR)/$(ELFILE)
 	$(EM_DIR)/$(EM) $(EMFLAGS)

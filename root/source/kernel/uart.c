@@ -7,7 +7,7 @@
 //write 'data' to 'reg'
 void mmio_write(uint32_t reg, uint32_t data)
 {
-    //reg is the address of the corresponding character
+    //reg is the address of the corresponding register
     //(volatile uint32_t*) is used to cast this to a pointer of type uint32_t
     //assign the value 'data' to reg
     *(volatile uint32_t*)reg = data;
