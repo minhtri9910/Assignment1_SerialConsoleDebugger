@@ -1,5 +1,3 @@
-#include <stddef.h>
-#include <stdint.h>
 #include "../../include/common/mystdlib.h"
 
 //zero out segment of "bytes" in memory counted from "dest" address

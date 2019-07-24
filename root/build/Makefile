@@ -57,7 +57,7 @@ $(OBJS_DIR)/%.o : $(SRC_KER_DIR)/%.c $(INC_KER_DIR)/%.h
 
 #Link all object files
 $(OBJS_DIR)/$(ELFILE) : $(OBJS_DIR)/boot.o $(OBJS_DIR)/stdio.o $(OBJS_DIR)/mystdlib.o $(OBJS_DIR)/kernel.o $(OBJS_DIR)/uart.o
-	@echo Lining Objects Files: $^
+	@echo Linking Objects Files: $^
 	@$(CC_DIR)/$(CC) -T linker.ld -o $(OBJS_DIR)/$(ELFILE) $(LFLAGS) $^
 	@echo Extensible Linkable Format File: $@ created
 

@@ -1,9 +1,11 @@
-#include <stddef.h>
-#include <stdint.h>
-
 #ifndef __UART__
 #define __UART__
 
+#include <stddef.h>
+#include <stdint.h>
+#include "../../include/common/mystdlib.h"
+
+//in union the struct and variable as_int share the same memory
 typedef union uart_flags {
     struct
     {

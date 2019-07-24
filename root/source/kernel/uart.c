@@ -1,7 +1,4 @@
-#include <stddef.h>
-#include <stdint.h>
 #include "../../include/kernel/uart.h"
-#include "../../include/common/mystdlib.h"
 
 // Memory-Mapped I/O output
 //write 'data' to 'reg'

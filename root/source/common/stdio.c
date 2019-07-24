@@ -1,6 +1,4 @@
-#include "../../include/kernel/uart.h"
 #include "../../include/common/stdio.h"
-#include "../../include/common/mystdlib.h"
 
 //get a single character from the standard i/o (UART device in Raspberry Pi 3)
 char getc(void) {

@@ -1,6 +1,9 @@
 #ifndef __MYSTDLIB__
 #define __MYSTDLIB__
 
+#include <stddef.h>
+#include <stdint.h>
+
 void bzero(void * dest, int bytes);
 
 char* itoa(int i);
