@@ -56,13 +56,13 @@ enum
 {
     BSC0_BASE = 0x7E205000,
     BSC0_C = (BSC0_BASE + 0x00), // Control
-    BSC0_S = (BSC0_BASE + 0x4), // Status
-    BSC0_DLEN = (BSC0_BASE + 0x8), // Data Length
+    BSC0_S = (BSC0_BASE + 0x04), // Status
+    BSC0_DLEN = (BSC0_BASE + 0x08), // Data Length
     BSC0_A = (BSC0_BASE + 0xC), // Slave Adress
     BSC0_FIFO = (BSC0_BASE + 0x10), //  Data FIFO
     BSC0_DIV = (BSC0_BASE + 0x14), // Clock Divider
     BSC0_DEL = (BSC0_BASE + 0x18), // Data Delay
-    BSC0_CLKT = (BSC0_BASE + 0x1c), // Clock Stretch Timeout
+    BSC0_CLKT = (BSC0_BASE + 0x1C), // Clock Stretch Timeout
 }
 
 #endif
