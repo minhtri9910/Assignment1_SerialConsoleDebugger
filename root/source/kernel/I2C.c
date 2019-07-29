@@ -48,11 +48,10 @@ void I2C_init()
     field disables interrupts on RXR. */
     // control.INTR_interrupt_on_RX = 1;
 
-    I2C_status_t read_status(void) {
+    
+}
+I2C_status_t read_status(void) {
         I2C_status_t status;
         status.as_int = mmio_read(BSC0_S);
         return status;
     }
-
-
-}
