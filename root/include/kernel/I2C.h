@@ -69,4 +69,6 @@ enum
 
 void I2C_init();
 
+I2C_status_t read_status(void);
+
 #endif
