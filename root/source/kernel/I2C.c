@@ -50,6 +50,7 @@ void I2C_init()
 
     
 }
+
 I2C_status_t read_status(void) {
         I2C_status_t status;
         status.as_int = mmio_read(BSC0_S);
