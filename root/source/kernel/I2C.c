@@ -1,5 +1,6 @@
 #include "../../include/kernel/I2C.h"
 
+
 void I2C_init()
 {
     /* C Register (Control Register) - enable interrupts, clear the FIFO, 
