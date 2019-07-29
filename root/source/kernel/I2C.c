@@ -6,6 +6,10 @@ void I2C_init()
 define a read or write operation and start a transfer */ 
     I2C_control_t control;
     bzero (&control, 4);
+    mmio_write(BSC0_C, control.as_int); // Set all the C_Register to 0
+
+    control.I2CEN_I2C_enable = 1; // Enable BSC 
+
     
 
 
