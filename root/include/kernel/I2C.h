@@ -56,8 +56,8 @@ enum
 {
     BSC0_BASE = 0x7E205000,
     BSC0_C = (BSC0_BASE + 0x00), // Control
-    BSC0_S = (BSC0_BASE + 0x40), // Status
-    BSC0_DLEN = (BSC0_BASE + 0x80), // Data Length
+    BSC0_S = (BSC0_BASE + 0x4), // Status
+    BSC0_DLEN = (BSC0_BASE + 0x8), // Data Length
     BSC0_A = (BSC0_BASE + 0xC), // Slave Adress
     BSC0_FIFO = (BSC0_BASE + 0x10), //  Data FIFO
     BSC0_DIV = (BSC0_BASE + 0x14), // Clock Divider
