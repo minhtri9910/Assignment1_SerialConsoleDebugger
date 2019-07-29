@@ -15,7 +15,9 @@ typedef union I2C_control {
         uint8_t INTD_interrupt_on_DONE: 1; // if 1, generate interrupt while DONE = 1
         uint8_t ST_Start_Transfer : 1; // if 1, start a new transfer. One shot operation. Read back as 0
         uint8_t padding2 : 1;
-        uint8_t CLEAR_FIFO_Clear : 2; // x1 = Clear FIFO. One shot operationn; 1x = CLear FIFO. One shot operation. if CLEAR and ST are both set in the same operation, the FIFO is cleared before the new frame is started. Read back as 0.
+        uint8_t CLEAR_FIFO_Clear : 2; /* x1 = Clear FIFO. One shot operationn; 1x = CLear FIFO. One shot operation. 
+        if CLEAR and ST are both set in the same operation, the FIFO is cleared before the new frame is started. 
+        Read back as 0. */
         uint8_t padding3 : 3; 
         uint8_t READ_Read_Transfer : 1; // 0 = Write Packet Transfer. 1 = Read packet Transfer
     };
@@ -35,7 +37,8 @@ typedef union I2C_status {
     struct
     {
         uint8_t padding : 22; // Reserver
-        uint8_t Clock_Stretch_Timeout : 1;
+        uint8_t Clock_Stretch_Timeout : 1; /* 1 = Slave has held the SCL signal low (clock stretching) 
+        for longer and that specified in the I2CCLKT register Cleared by writing 1 to the field */
         uint8_t ACK_Error : 1;
         uint8_t RXF_FIFO_Full : 1;
         uint8_t TXE_FIFO_Empty : 1;
