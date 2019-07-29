@@ -65,3 +65,4 @@ enum
     BSC0_CLKT = (BSC0_BASE + 0x1c), // Clock Stretch Timeout
 }
 
+#endif
