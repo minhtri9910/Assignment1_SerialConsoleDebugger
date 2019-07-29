@@ -24,14 +24,14 @@ typedef union I2C_control {
     uint32_t as_int;
 } I2C_control_t;
 
-typedef union I2C_slave_address {
-    struct
-    {
-        uint8_t padding : 25; // Reserver
-        uint8_t ADDR_Slave_Address : 7; 
-    };
-    uint32_t as_int;
-} I2C_slave_address_t;
+// typedef union I2C_slave_address {
+//     struct
+//     {
+//         uint8_t padding : 25; // Reserver
+//         uint8_t ADDR_Slave_Address : 7; 
+//     };
+//     uint32_t as_int;
+// } I2C_slave_address_t;
 
 typedef union I2C_status {
     struct
@@ -58,7 +58,7 @@ enum
     BSC0_C = (BSC0_BASE + 0x00), // Control
     BSC0_S = (BSC0_BASE + 0x04), // Status
     BSC0_DLEN = (BSC0_BASE + 0x08), // Data Length
-    BSC0_A = (BSC0_BASE + 0xC), // Slave Adress
+    BSC0_A = (BSC0_BASE + 0xC), // Slave Address
     BSC0_FIFO = (BSC0_BASE + 0x10), //  Data FIFO
     BSC0_DIV = (BSC0_BASE + 0x14), // Clock Divider
     BSC0_DEL = (BSC0_BASE + 0x18), // Data Delay
