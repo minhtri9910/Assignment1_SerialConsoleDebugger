@@ -9,7 +9,7 @@ typedef union I2C_control {
     struct
     {
         uint8_t padding : 16; // Reserver
-        uint8_t I2C_enable : 1; // if 1, BSC is enabled
+        uint8_t I2CEN_I2C_enable : 1; // if 1, BSC is enabled
         uint8_t padding1 : 4; // Reserver
         uint8_t INTR_interrupt_on_RX : 1; // if 1, generate interrupt while RXR = 1
         uint8_t INTT_interrupt_on_TX : 1; // if 1, generate interrupt while TXW = 1
