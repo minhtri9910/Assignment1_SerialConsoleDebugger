@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "../../include/common/mystdlib.h"
 
 typedef union I2C_control {
     struct
@@ -64,5 +65,7 @@ enum
     BSC0_DEL = (BSC0_BASE + 0x18), // Data Delay
     BSC0_CLKT = (BSC0_BASE + 0x1C), // Clock Stretch Timeout
 }
+
+void I2C_init();
 
 #endif
