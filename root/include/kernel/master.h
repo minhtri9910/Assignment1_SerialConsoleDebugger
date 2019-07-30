@@ -55,15 +55,27 @@ typedef union I2C_status {
 
 enum
 {
-    BSC0_BASE = 0x3F205000,
-    BSC0_C = (BSC0_BASE + 0x00),    // Control
-    BSC0_S = (BSC0_BASE + 0x04),    // Status
-    BSC0_DLEN = (BSC0_BASE + 0x08), // Data Length
-    BSC0_A = (BSC0_BASE + 0xC),     // Slave Address
-    BSC0_FIFO = (BSC0_BASE + 0x10), //  Data FIFO
-    BSC0_DIV = (BSC0_BASE + 0x14),  // Clock Divider
-    BSC0_DEL = (BSC0_BASE + 0x18),  // Data Delay
-    BSC0_CLKT = (BSC0_BASE + 0x1C), // Clock Stretch Timeout
+    //Use BSC1 to use Pin 3 and Pin 5 to connect to line SDA1 and SCL1
+    BSC1_BASE = 0x3F804000,
+    BSC1_C = (BSC1_BASE + 0x00),    // Control
+    BSC1_S = (BSC1_BASE + 0x04),    // Status
+    BSC1_DLEN = (BSC1_BASE + 0x08), // Data Length
+    BSC1_A = (BSC1_BASE + 0xC),     // Slave Address
+    BSC1_FIFO = (BSC1_BASE + 0x10), //  Data FIFO
+    BSC1_DIV = (BSC1_BASE + 0x14),  // Clock Divider
+    BSC1_DEL = (BSC1_BASE + 0x18),  // Data Delay
+    BSC1_CLKT = (BSC1_BASE + 0x1C), // Clock Stretch Timeout
+
+    //For BSC0 
+    // BSC0_BASE = 0x3F205000,
+    // BSC0_C = (BSC0_BASE + 0x00),    // Control
+    // BSC0_S = (BSC0_BASE + 0x04),    // Status
+    // BSC0_DLEN = (BSC0_BASE + 0x08), // Data Length
+    // BSC0_A = (BSC0_BASE + 0xC),     // Slave Address
+    // BSC0_FIFO = (BSC0_BASE + 0x10), //  Data FIFO
+    // BSC0_DIV = (BSC0_BASE + 0x14),  // Clock Divider
+    // BSC0_DEL = (BSC0_BASE + 0x18),  // Data Delay
+    // BSC0_CLKT = (BSC0_BASE + 0x1C), // Clock Stretch Timeout
 };
 
 void I2C_init();
