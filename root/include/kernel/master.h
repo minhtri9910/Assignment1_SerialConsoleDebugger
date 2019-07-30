@@ -3,7 +3,6 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include "../../common/mystdlib.h"
 #include "../../include/kernel/uart.h"
 
 typedef union I2C_control {
@@ -21,7 +20,7 @@ typedef union I2C_control {
         uint8_t INTR_interrupt_on_RX : 1;   // if 1, generate interrupt while RXR = 1
         uint8_t padding3 : 4;               // Reserver
         uint8_t I2CEN_I2C_enable : 1;       // if 1, BSC is enabled
-        uint8_t padding4 : 16;              // Reserver
+        uint32_t padding4 : 16;              // Reserver
     };
     uint32_t as_int;
 } I2C_control_t;
@@ -49,7 +48,7 @@ typedef union I2C_status {
         uint8_t ERR_ACK_error : 1;                   // 0 = No errors detected. 1 = Slave has not acknowledged its address. Cleared by writing 1 to the field
         uint8_t CLKT_clock_stretch_timeout : 1;       /* 1 = Slave has held the SCL signal low (clock stretching) 
         for longer and that specified in the I2CCLKT register Cleared by writing 1 to the field */
-        uint8_t padding : 22;                    // Reserver
+        uint32_t padding : 22;                    // Reserver
     };
     uint32_t as_int;
 } I2C_status_t;
@@ -65,7 +64,7 @@ enum
     BSC0_DIV = (BSC0_BASE + 0x14),  // Clock Divider
     BSC0_DEL = (BSC0_BASE + 0x18),  // Data Delay
     BSC0_CLKT = (BSC0_BASE + 0x1C), // Clock Stretch Timeout
-}
+};
 
 void I2C_init();
 

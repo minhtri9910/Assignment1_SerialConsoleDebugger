@@ -3,7 +3,6 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include "../../common/mystdlib.h"
 #include "../../include/kernel/uart.h"
 
 typedef union slave_control {
@@ -23,7 +22,7 @@ typedef union slave_control {
         uint8_t TESTFIFO_test_fifo : 1;                  // 0 = TESTT FIFO disabled; 1 = TESTT FIFO enabled
         uint8_t HOSTCTRLEN_enable_control_for_host : 1;  // 0 = Host Control disabled; 1 = Host Control Enabled
         uint8_t INV_TXF_inverse_TX_status_flags : 1;     // 0 = default status flags; 1 = inverted status flags
-        uint8_t padding : 18;                            // Reserver
+        uint32_t padding : 18;                            // Reserver
     };
     uint32_t as_int;
 } slave_control_t;
@@ -39,7 +38,7 @@ typedef union slave_flag {
         uint8_t RXBUSY_reveive_busy : 1;    // 0 = Receive oepration inactive; 1 = Receive operation in operation
         uint8_t TXFLEVEL_TX_FIFO_level : 5; // Returns the current level of the TX FIFO use
         uint8_t RXFLEVEL_RX_FIFO_level : 5; // Returns the current level of the RX FIFO use
-        uint8_t padding : 16;               // Reserved
+        uint32_t padding : 16;               // Reserved
     };
     uint32_t as_int;
 } slave_flag_t;
@@ -63,6 +62,6 @@ enum
     BSC_SLAVE_HCTRL = (BSC_SLAVE_BASE + 0x34),   // Host Control Register
     BSC_SLAVE_DEBUG1 = (BSC_SLAVE_BASE + 0x38),  // I2C Debug Register
     BSC_SLAVE_DEBUG2 = (BSC_SLAVE_BASE + 0x3C),  // SPI Debug Register
-}
+};
 
 #endif
