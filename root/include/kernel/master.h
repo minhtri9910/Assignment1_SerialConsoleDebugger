@@ -55,6 +55,11 @@ typedef union I2C_status {
 
 enum
 {
+    //Define GPIO base
+    GPIO_BASE = 0x3F200000,
+    GPPUD = (GPIO_BASE + 0x94),
+    GPPUDCLK0 = (GPIO_BASE + 0x98),
+
     //Use BSC1 to use Pin 3 and Pin 5 to connect to line SDA1 and SCL1
     BSC1_BASE = 0x3F804000,
     BSC1_C = (BSC1_BASE + 0x00),    // Control
