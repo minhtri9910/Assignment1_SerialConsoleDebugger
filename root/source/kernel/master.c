@@ -1,14 +1,14 @@
 #include "../../include/kernel/master.h"
 
 
-void I2C_init()
+void I2C_master_init()
 {
     /* C Register (Control Register) - enable interrupts, clear the FIFO, 
     define a read or write operation and start a transfer */ 
     // Set all the C_Register to 0
     I2C_control_t control;
     bzero (&control, 4);
-    mmio_write(BSC0_C, control.as_int); 
+    mmio_write(BSC1_C, control.as_int); 
 
     /*The I2CEN field enables BSC operations. If this bit is 0 then transfer 
     will not be performed. All register accesses are still permitted however. */
@@ -48,13 +48,16 @@ void I2C_init()
     field disables interrupts on RXR. */
     // control.INTR_interrupt_on_RX = 1;
 
-    /* Slave address */
-    mmio_write(BSC0_A, 0x69); // Slave address = 110 1001
+    /* Slave address - for tinyRTC */
+    mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
+
+    /* Slave address - for Slave Raspberry Pi */
+    //mmio_write(BSC1_A, 0x69); // Slave address = 110 1001
 }
 
 I2C_status_t read_status(void) {
         I2C_status_t status;
-        status.as_int = mmio_read(BSC0_S);
+        status.as_int = mmio_read(BSC1_S);
         return status;
 }
 

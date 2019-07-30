@@ -78,7 +78,7 @@ enum
     // BSC0_CLKT = (BSC0_BASE + 0x1C), // Clock Stretch Timeout
 };
 
-void I2C_init();
+void I2C_master_init();
 
 I2C_status_t read_status(void);
 
