@@ -49,7 +49,7 @@ void I2C_init()
     // control.INTR_interrupt_on_RX = 1;
 
     /* Slave address */
-    // mmio_write(BSC0_A, );
+    mmio_write(BSC0_A, 0x69 ); // Slave address = 110 1001
 }
 
 I2C_status_t read_status(void) {
