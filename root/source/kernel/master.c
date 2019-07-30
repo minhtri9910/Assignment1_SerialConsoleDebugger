@@ -20,12 +20,10 @@ void I2C_master_init()
     mmio_write(GPPUDCLK0, 0x00000000);
 
     /* Slave address - for tinyRTC */
-    mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
+    //mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
 
     /* Slave address - for Slave Raspberry Pi */
     //mmio_write(BSC1_A, 0x69); // Slave address = 110 1001
-
-    
 
     /*The I2CEN field enables BSC operations. If this bit is 0 then transfer 
     will not be performed. All register accesses are still permitted however. */
@@ -65,7 +63,7 @@ void I2C_master_init()
     field disables interrupts on RXR. */
     // control.INTR_interrupt_on_RX = 1;
 
-
+    mmio_write(BSC1_C, control.as_int); 
 }
 
 I2C_status_t read_status(void) {
