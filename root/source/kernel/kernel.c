@@ -16,7 +16,34 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("S3715125: Duong Minh Nhat\n");
     puts("S3426353: Hoang Quoc Dai\n");
 
-    while (1) {
-        gets(buf,256);
-    }
+    //Deliverable 3
+    I2C_master_init();
+
+    /* Communicate with tinyRTC - enable CH bit */
+    //Specify slave address of tinyRTC
+    mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
+
+    //Data length: 3 bytes to transmit - first byte for slave address, 2nd byte for register address of tinyRTC, 3rd byte for data 
+    //Referenced: Page 36 - BCM2837 Manual; Page 8 - DS1307 Manual
+    mmio_write(BSC1_DLEN, 0x3);
+
+    //Create master controller
+    I2C_control_t control;
+    bzero (&control, 4);
+
+    //Clear FIFO before transaction - about FIFO register: page 33 - BCM2837 Manual
+    
+
+    //Write method
+    control.READ_read_transfer = 0;
+
+
+
+
+    
+
+
+    // while (1) {
+    //     gets(buf,256);
+    // }
 }
