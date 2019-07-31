@@ -90,7 +90,8 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     }
     while (flags.TA_transfer_active); //At this point - the Receiver FIFO contains data from tinyRTC
 
-
+    /* Extract data from FIFO and display to console */
+    puts(mmio_read(BSC1_FIFO));
 
     // while (1) {
     //     gets(buf,256);
