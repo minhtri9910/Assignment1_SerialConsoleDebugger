@@ -2,7 +2,7 @@
 
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
-    char buf[256];
+    //char buf[256];
     // Declare as unused
     (void) r0;
     (void) r1;
@@ -54,11 +54,11 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     mmio_write(BSC1_C, control.as_int); 
     
     //Wait until transfer finished
-    I2C_status_t flags;
+    I2C_status_t status;
     do {
-        flags = read_status();
+        status = read_status();
     }
-    while (flags.TA_transfer_active);
+    while (status.TA_transfer_active);
 
     /* Read data from tinyRTC */
     //Zero out control again
@@ -84,14 +84,13 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     mmio_write(BSC1_C, control.as_int); 
     
     //Wait until transfer finished
-    I2C_status_t flags;
     do {
-        flags = read_status();
+        status = read_status();
     }
-    while (flags.TA_transfer_active); //At this point - the Receiver FIFO contains data from tinyRTC
+    while (status.TA_transfer_active); //At this point - the Receiver FIFO contains data from tinyRTC
 
     /* Extract data from FIFO and display to console */
-    puts(mmio_read(BSC1_FIFO));
+    puts((char*) mmio_read(BSC1_FIFO));
 
     // while (1) {
     //     gets(buf,256);
