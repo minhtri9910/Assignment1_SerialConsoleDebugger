@@ -83,6 +83,13 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     //Apply control to control register -- transfer should start after this line of code (to read data from tinyRTC)
     mmio_write(BSC1_C, control.as_int); 
     
+    //Wait until transfer finished
+    I2C_status_t flags;
+    do {
+        flags = read_status();
+    }
+    while (flags.TA_transfer_active); //At this point - the Receiver FIFO contains data from tinyRTC
+
 
 
     // while (1) {
@@ -102,4 +109,11 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     //Data length: 3 bytes to transmit - first byte for slave address, 2nd byte for register address of tinyRTC, 3rd byte for data 
     //Referenced: Page 36 - BCM2837 Manual; Page 8 - DS1307 Manual - Data Write
     mmio_write(BSC1_DLEN, 0x3);
+ */
+
+/*
+    How to access data from receiver FIFO
+    -- Read one by one after each transfer?
+    or
+    -- Wait until transfer finishes then read all?
  */
