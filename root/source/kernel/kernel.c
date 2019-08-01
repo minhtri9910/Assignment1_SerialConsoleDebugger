@@ -17,15 +17,11 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("S3426353: Hoang Quoc Dai\n");
 
     //Deliverable 3
-    I2C_master_init();
+    // I2C_master_init();
 
     /* Communicate with tinyRTC - enable CH bit */
     //Specify slave address of tinyRTC
     mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
-
-    //Write data to transmit to FIFO register
-    mmio_write(BSC1_FIFO, 0x00); //1st byte: Register address OOH of tinyRTC
-    mmio_write(BSC1_FIFO, 0x00); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
 
     //Data length: 2 bytes to transmit - 1st byte for register address of tinyRTC, 2nd byte for data 
     //Referenced: Page 8 - DS1307 Manual - Data Write
@@ -41,8 +37,15 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     //Apply CLEAR FIFO to control register
     mmio_write(BSC1_C, control.as_int); 
 
+    //Write data to transmit to FIFO register
+    mmio_write(BSC1_FIFO, 0x00); //1st byte: Register address OOH of tinyRTC
+    mmio_write(BSC1_FIFO, 0x00); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
+
     //Zero out control again
     bzero (&control, 4);
+
+    //Enable I2C
+    control.I2CEN_I2C_enable = 1;
 
     //Specify Write method
     control.READ_read_transfer = 0;

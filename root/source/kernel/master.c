@@ -6,9 +6,9 @@ void I2C_master_init()
     /* C Register (Control Register) - enable interrupts, clear the FIFO, 
     define a read or write operation and start a transfer */ 
     // Set all the C_Register to 0
-    I2C_control_t control;
-    bzero (&control, 4);
-    mmio_write(BSC1_C, control.as_int); 
+    // I2C_control_t control;
+    // bzero (&control, 4);
+    // mmio_write(BSC1_C, control.as_int); 
 
     //Set up for GPIO2 and GPIO3 - SDA1 and SCL1
     mmio_write(GPPUD, 0x00000000);
@@ -27,7 +27,7 @@ void I2C_master_init()
 
     /*The I2CEN field enables BSC operations. If this bit is 0 then transfer 
     will not be performed. All register accesses are still permitted however. */
-    control.I2CEN_I2C_enable = 1;
+    //control.I2CEN_I2C_enable = 1;
 
     /* the Read field specifies the type of transfer */
     // control.READ_Read_Transfer = 1;
@@ -63,7 +63,7 @@ void I2C_master_init()
     field disables interrupts on RXR. */
     // control.INTR_interrupt_on_RX = 1;
 
-    mmio_write(BSC1_C, control.as_int); 
+    // mmio_write(BSC1_C, control.as_int); 
 }
 
 I2C_status_t read_status(void) {
