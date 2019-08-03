@@ -41,6 +41,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     mmio_write(BSC1_FIFO, 0x00); //1st byte: Register address OOH of tinyRTC
     mmio_write(BSC1_FIFO, 0x12); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
 
+
     //Zero out control again
     bzero (&control, 4);
 
@@ -59,7 +60,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     do {
         status = read_status();
     }
-    while (status.TA_transfer_active);
+    while (status.TA_transfer_active && !(status.DONE_transfer_done));
 
     /* Read data from tinyRTC */
 
@@ -84,15 +85,23 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     control.ST_start_transfer = 1;
     //Apply control to control register -- transfer should start after this line of code (to read data from tinyRTC)
     mmio_write(BSC1_C, control.as_int); 
+
+    //Clear DONE
+    mmio_write(BSC1_S, (1 << 1));
     
     //Wait until transfer finished
     do {
         status = read_status();
     }
-    while (status.TA_transfer_active); //At this point - the Receiver FIFO contains data from tinyRTC
+    while (status.TA_transfer_active && !(status.DONE_transfer_done)); //At this point - the Receiver FIFO contains data from tinyRTC
+
+    //Clear DONE
+    mmio_write(BSC1_S, (1 << 1));
 
     /* Extract data from FIFO and display to console */
     puts((char*) mmio_read(BSC1_FIFO));
+
+
 
     // while (1) {
     //     gets(buf,256);
