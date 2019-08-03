@@ -18,6 +18,10 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
     //Deliverable 3
     I2C_master_init();
+    // char c;
+    // if (GPFSEL0 & (1UL<<8)) c='1'; 
+    // else c = '0';
+    // putc(c);
 
     /* Communicate with tinyRTC - enable CH bit */
     //Specify slave address of tinyRTC
@@ -99,7 +103,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     mmio_write(BSC1_S, (1 << 1));
 
     /* Extract data from FIFO and display to console */
-    puts((char*) mmio_read(BSC1_FIFO));
+    //puts((char*) mmio_read(BSC1_FIFO));
 
 
 
