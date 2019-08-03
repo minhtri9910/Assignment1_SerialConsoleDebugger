@@ -17,7 +17,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("S3426353: Hoang Quoc Dai\n");
 
     //Deliverable 3
-    // I2C_master_init();
+    I2C_master_init();
 
     /* Communicate with tinyRTC - enable CH bit */
     //Specify slave address of tinyRTC
@@ -30,6 +30,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     //Create master controller
     I2C_control_t control;
     bzero (&control, 4);
+    mmio_write(BSC1_C, control.as_int); //Set all to 0
 
     //Clear FIFO before transaction - about FIFO register: page 33 - BCM2837 Manual
     control.CLEAR_FIFO_clear = 1; //!!! Unsure 1 or 2 or both?? - need to look back
@@ -64,8 +65,6 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     while (status.TA_transfer_active);
 
     /* Read data from tinyRTC */
-    //Zero out control again
-    bzero (&control, 4);
 
     //Slave address - (already defined above - may be possible to comment out!!)
     mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
@@ -73,6 +72,9 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     //Data length: 7 bytes to read - seconds, minutes, hours, day, date, month, year
     //Referenced: page 8 - DS1307 Manual - Data Read
     mmio_write(BSC1_DLEN, 0x7);
+
+    //Zero out control again
+    bzero (&control, 4);
     
     //Clear FIFO before transaction - about FIFO register: page 33 - BCM2837 Manual
     control.CLEAR_FIFO_clear = 1;

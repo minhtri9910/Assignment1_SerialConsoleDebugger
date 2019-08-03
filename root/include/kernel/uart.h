@@ -48,6 +48,7 @@ typedef union uart_control {
 enum
 {
     GPIO_BASE = 0x3F200000,
+    GPFSEL0 = GPIO_BASE, //GPIO function select - page 90 - BCM2837 Manual
     GPPUD = (GPIO_BASE + 0x94),
     GPPUDCLK0 = (GPIO_BASE + 0x98),
     UART0_BASE = (GPIO_BASE + 0x1000),  // UART Base address
