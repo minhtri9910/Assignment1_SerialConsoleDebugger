@@ -81,4 +81,11 @@ I2C_status_t read_status(void) {
         return status;
 }
 
+unsigned int bcdtod(unsigned int bcd) {
+    return ((bcd & 0xf0) >> 4) * 10 + (bcd & 0x0f);
+}
+
+unsigned int dtobcd(unsigned int d) {
+    return ((d / 10) << 4) + (d % 10);
+}
 

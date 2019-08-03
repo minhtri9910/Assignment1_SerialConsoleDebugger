@@ -34,23 +34,20 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
     //Clear FIFO before transaction - about FIFO register: page 33 - BCM2837 Manual
     control.CLEAR_FIFO_clear = 1; //!!! Unsure 1 or 2 or both?? - need to look back
-
     //Apply CLEAR FIFO to control register
     mmio_write(BSC1_C, control.as_int); 
 
     //Write data to transmit to FIFO register
     mmio_write(BSC1_FIFO, 0x00); //1st byte: Register address OOH of tinyRTC
-    mmio_write(BSC1_FIFO, 0x00); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
+    mmio_write(BSC1_FIFO, 0x12); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
 
     //Zero out control again
     bzero (&control, 4);
 
     //Enable I2C
     control.I2CEN_I2C_enable = 1;
-
     //Specify Write method
     control.READ_read_transfer = 0;
-
     //Start transfer
     control.ST_start_transfer = 1;
 
@@ -75,16 +72,16 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
     //Zero out control again
     bzero (&control, 4);
-    
+    mmio_write(BSC1_C, control.as_int); //Set all to 0  
+
     //Clear FIFO before transaction - about FIFO register: page 33 - BCM2837 Manual
     control.CLEAR_FIFO_clear = 1;
-
+    //Enable I2C
+    control.I2CEN_I2C_enable = 1;
     //Specify Read method
     control.READ_read_transfer = 1;
-
     //Start transfer
     control.ST_start_transfer = 1;
-
     //Apply control to control register -- transfer should start after this line of code (to read data from tinyRTC)
     mmio_write(BSC1_C, control.as_int); 
     
