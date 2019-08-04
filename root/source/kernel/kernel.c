@@ -1,5 +1,6 @@
 #include "../../include/kernel/kernel.h"
 
+
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
     //char buf[256];
@@ -15,6 +16,8 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("S3726096: Nguyen Minh Tri\n");
     puts("S3715125: Duong Minh Nhat\n");
     puts("S3426353: Hoang Quoc Dai\n");
+    
+    puts("Trial 6\n");
 
     //Deliverable 3
     I2C_master_init();
@@ -63,8 +66,12 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     I2C_status_t status;
     do {
         status = read_status();
+        if (status.TA_transfer_active) puts("Write\n");
     }
-    while (status.TA_transfer_active && !(status.DONE_transfer_done));
+    while (!(status.DONE_transfer_done));
+
+    //Clear DONE
+    mmio_write(BSC1_S, (1 << 1));
 
     /* Read data from tinyRTC */
 
@@ -91,22 +98,30 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     control.ST_start_transfer = 1;
     //Apply control to control register -- transfer should start after this line of code (to read data from tinyRTC)
     mmio_write(BSC1_C, control.as_int); 
-
-    //Clear DONE
-    mmio_write(BSC1_S, (1 << 1));
     
     //Wait until transfer finished
     do {
         status = read_status();
+        if (status.TA_transfer_active) {
+            puts("Read: ");
+            char c;
+            c = mmio_read(BSC1_FIFO);
+            putc(c);
+            putc('\n');
+        }
     }
-    while (status.TA_transfer_active && !(status.DONE_transfer_done)); //At this point - the Receiver FIFO contains data from tinyRTC
+    while (!(status.DONE_transfer_done)); //At this point - the Receiver FIFO contains data from tinyRTC
 
     //Clear DONE
     mmio_write(BSC1_S, (1 << 1));
 
     /* Extract data from FIFO and display to console */
+<<<<<<< Updated upstream
     puts((char*) mmio_read(BSC1_FIFO));
 
+=======
+    // puts((char*) mmio_read(BSC1_FIFO));
+>>>>>>> Stashed changes
 
 
     // while (1) {
