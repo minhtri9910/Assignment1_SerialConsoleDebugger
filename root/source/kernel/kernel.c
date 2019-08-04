@@ -18,18 +18,16 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
     //Deliverable 3
     I2C_master_init();
-    // char c;
-    // if (GPFSEL0 & (1UL<<8)) c='1'; 
-    // else c = '0';
-    // putc(c);
 
     /* Communicate with tinyRTC - enable CH bit */
     //Specify slave address of tinyRTC
-    mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
+    // mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
+    mmio_write(BSC1_A, (1 << 3) | (1 << 5) | (1 << 6));
 
     //Data length: 2 bytes to transmit - 1st byte for register address of tinyRTC, 2nd byte for data 
     //Referenced: Page 8 - DS1307 Manual - Data Write
-    mmio_write(BSC1_DLEN, 0x2);
+    // mmio_write(BSC1_DLEN, 0x2);
+    mmio_write(BSC1_A, (1 << 1));
 
     //Create master controller
     I2C_control_t control;
@@ -42,8 +40,10 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     mmio_write(BSC1_C, control.as_int); 
 
     //Write data to transmit to FIFO register
-    mmio_write(BSC1_FIFO, 0x00); //1st byte: Register address OOH of tinyRTC
-    mmio_write(BSC1_FIFO, 0x12); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
+    // mmio_write(BSC1_FIFO, 0x00); //1st byte: Register address OOH of tinyRTC
+    // mmio_write(BSC1_FIFO, 0x12); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
+    mmio_write(BSC1_FIFO, 0x00000000);
+    mmio_write(BSC1_FIFO, 0x00000000);
 
 
     //Zero out control again
@@ -69,11 +69,13 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     /* Read data from tinyRTC */
 
     //Slave address - (already defined above - may be possible to comment out!!)
-    mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
+    // mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
+    mmio_write(BSC1_A, (1 << 3) | (1 << 5) | (1 << 6));
 
     //Data length: 7 bytes to read - seconds, minutes, hours, day, date, month, year
     //Referenced: page 8 - DS1307 Manual - Data Read
-    mmio_write(BSC1_DLEN, 0x7);
+    // mmio_write(BSC1_DLEN, 0x7);
+    mmio_write(BSC1_A, (1 << 1));
 
     //Zero out control again
     bzero (&control, 4);
@@ -103,7 +105,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     mmio_write(BSC1_S, (1 << 1));
 
     /* Extract data from FIFO and display to console */
-    //puts((char*) mmio_read(BSC1_FIFO));
+    puts((char*) mmio_read(BSC1_FIFO));
 
 
 

@@ -20,12 +20,13 @@ void I2C_master_init()
     mmio_write(GPPUDCLK0, 0x00000000);
 
     //Set alternative function 0 (ALT0) for GPIO2 and GPIO3 - page 102,92 - BCM2837 Manual
-    //GPIO2 - bit 6:8 - 0b111 = 7, 0b100 = 4: set to ALT0
-    mmio_write(GPFSEL0, GPFSEL0 & ~(7UL << 6)); 
-    mmio_write(GPFSEL0, GPFSEL0 | (4UL << 6));
-    //GPIO3 - bit 9:11 
-    mmio_write(GPFSEL0, GPFSEL0 & ~(7UL << 9)); 
-    mmio_write(GPFSEL0, GPFSEL0 | (4UL << 9));
+    // //GPIO2 - bit 6:8 - 0b111 = 7, 0b100 = 4: set to ALT0
+    // mmio_write(GPFSEL0, GPFSEL0 & ~(7UL << 6)); 
+    // mmio_write(GPFSEL0, GPFSEL0 | (4UL << 6));
+    // //GPIO3 - bit 9:11 
+    // mmio_write(GPFSEL0, GPFSEL0 & ~(7UL << 9)); 
+    // mmio_write(GPFSEL0, GPFSEL0 | (4UL << 9));
+    mmio_write(GPFSEL0, 0x00000900);
 
 
     /* Slave address - for tinyRTC */
