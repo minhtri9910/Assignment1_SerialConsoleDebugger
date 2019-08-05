@@ -153,17 +153,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
         //Clear DONE
         mmio_write(BSC1_S, (1 << 1));
-
-
-        //Test only
-        //Clear FIFO
-        // mmio_write(BSC1_C, (1 << 5));
-        // bzero(&control, 4);
-        // mmio_write(BSC1_C, control.as_int); //Set all to 0
-        // control.CLEAR_FIFO_clear = 1;
-        // mmio_write(BSC1_C, control.as_int);
-
-
+  
         /* Extract data from FIFO and display to console */
         // puts((char*) mmio_read(BSC1_FIFO));
         // Store the values read in the tm structure, after masking unimplemented bits.
