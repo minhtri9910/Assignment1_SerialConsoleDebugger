@@ -16,6 +16,29 @@ uint32_t mmio_read(uint32_t reg)
     return *(volatile uint32_t*)reg;
 }
 
+void uart_putc(unsigned char c)
+{
+    uart_flags_t flags;
+    // Wait for UART to become ready to transmit.
+
+    do {
+        flags = read_flags();
+    }
+    while ( flags.transmit_queue_full );
+    mmio_write(UART0_DR, c);
+}
+
+unsigned char uart_getc()
+{
+    // Wait for UART to have received something.
+    uart_flags_t flags;
+    do {
+        flags = read_flags();
+    }
+    while ( flags.recieve_queue_empty );
+    return mmio_read(UART0_DR);
+}
+
 void uart_init()
 {
     uart_control_t control;
@@ -24,17 +47,17 @@ void uart_init()
     bzero(&control, 4);
     mmio_write(UART0_CR, control.as_int); //set all the CR register to 0
 
-    // Setup the GPIO pin 14 && 15.
-    // Disable pull up/down for all GPIO pins & delay for 150 cycles.
-    mmio_write(GPPUD, 0x00000000);
-    delay(150);
+    // // Setup the GPIO pin 14 && 15.
+    // // Disable pull up/down for all GPIO pins & delay for 150 cycles.
+    // mmio_write(GPPUD, 0x00000000);
+    // delay(150);
 
-    // Disable pull up/down for pin 14,15 & delay for 150 cycles.
-    mmio_write(GPPUDCLK0, (1 << 14) | (1 << 15));
-    delay(150);
+    // // Disable pull up/down for pin 14,15 & delay for 150 cycles.
+    // mmio_write(GPPUDCLK0, (1 << 14) | (1 << 15));
+    // delay(150);
 
-    // Write 0 to GPPUDCLK0 to make it take effect.
-    mmio_write(GPPUDCLK0, 0x00000000);
+    // // Write 0 to GPPUDCLK0 to make it take effect.
+    // mmio_write(GPPUDCLK0, 0x00000000);
 
     // Clear pending interrupts.
     mmio_write(UART0_ICR, 0x7FF);
@@ -60,25 +83,4 @@ uart_flags_t read_flags(void) {
     return flags;
 }
 
-void uart_putc(unsigned char c)
-{
-    uart_flags_t flags;
-    // Wait for UART to become ready to transmit.
 
-    do {
-        flags = read_flags();
-    }
-    while ( flags.transmit_queue_full );
-    mmio_write(UART0_DR, c);
-}
-
-unsigned char uart_getc()
-{
-    // Wait for UART to have received something.
-    uart_flags_t flags;
-    do {
-        flags = read_flags();
-    }
-    while ( flags.recieve_queue_empty );
-    return mmio_read(UART0_DR);
-}

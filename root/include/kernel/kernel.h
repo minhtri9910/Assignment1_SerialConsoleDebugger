@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include "../../include/kernel/uart.h"
 #include "../../include/kernel/master.h"
+#include "../../include/kernel/slave.h"
+#include "../../include/kernel/gpio.h"
 #include "../../include/common/stdio.h"
 #include "../../include/common/mystdlib.h"
 

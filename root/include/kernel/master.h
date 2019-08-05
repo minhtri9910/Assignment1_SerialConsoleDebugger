@@ -26,15 +26,6 @@ typedef union I2C_control {
     uint32_t as_int;
 } I2C_control_t;
 
-// typedef union I2C_slave_address {
-//     struct
-//     {
-//         uint8_t padding : 25; // Reserver
-//         uint8_t ADDR_Slave_Address : 7;
-//     };
-//     uint32_t as_int;
-// } I2C_slave_address_t;
-
 typedef union I2C_status {
     struct
     {
@@ -84,12 +75,14 @@ enum
     // BSC0_CLKT = (BSC0_BASE + 0x1C), // Clock Stretch Timeout
 };
 
-void I2C_master_init();
+void i2c_master_init();
 
 I2C_status_t read_status(void);
 
-unsigned int bcdtod(unsigned int bcd);
+void clear_FIFO();
 
-unsigned int dtobcd(unsigned int d);
+void start_tx(uint8_t read);
+
+void stop_tx();
 
 #endif
