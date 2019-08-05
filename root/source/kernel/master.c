@@ -89,4 +89,3 @@ unsigned int bcdtod(unsigned int bcd) {
 unsigned int dtobcd(unsigned int d) {
     return ((d / 10) << 4) + (d % 10);
 }
-
