@@ -20,6 +20,9 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("S3715125: Duong Minh Nhat\n");
     puts("S3426353: Hoang Quoc Dai\n");
 
+    puts("DS1307 Real Time Clock Data\n");
+    puts("----------------------------\n");
+
     i2c_master_init();
 
     /* COMMUNICATE WITH TINYRTC */
@@ -32,13 +35,24 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     mmio_write(BSC1_DLEN, 0x8);
     //Write data to transmit to FIFO register
     mmio_write(BSC1_FIFO, 0);    //1st byte: Register address OOH of tinyRTC
-    mmio_write(BSC1_FIFO, 0x12); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
-    mmio_write(BSC1_FIFO, 0x13);
-    mmio_write(BSC1_FIFO, 0x82);
-    mmio_write(BSC1_FIFO, 0x03);
-    mmio_write(BSC1_FIFO, 0x06);
-    mmio_write(BSC1_FIFO, 0x08);
-    mmio_write(BSC1_FIFO, 0x00);
+
+    mmio_write(BSC1_FIFO, convert_to_RTC(0)); //Seconds + Clearing CH bit
+    mmio_write(BSC1_FIFO, convert_to_RTC(51)); //Minutes
+    // mmio_write(BSC1_FIFO, 0x39); //Minutes
+    mmio_write(BSC1_FIFO, convert_to_RTC_hours(20,0)); //Hours - 24h mode
+    mmio_write(BSC1_FIFO, convert_to_RTC(1)); //Day
+    mmio_write(BSC1_FIFO, convert_to_RTC(5)); //Date
+    mmio_write(BSC1_FIFO, convert_to_RTC(8)); //Month
+    mmio_write(BSC1_FIFO, convert_to_RTC(0)); //Year - Start from 2019
+
+    // mmio_write(BSC1_FIFO, 0x12); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
+    // mmio_write(BSC1_FIFO, 0x13);
+    // mmio_write(BSC1_FIFO, 0x82);
+    // mmio_write(BSC1_FIFO, 0x03);
+    // mmio_write(BSC1_FIFO, 0x06);
+    // mmio_write(BSC1_FIFO, 0x08);
+    // mmio_write(BSC1_FIFO, 0x00);
+
     //Start transfers
     start_tx(0);
     //Wait until transfer finished

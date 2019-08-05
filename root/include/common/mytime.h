@@ -6,7 +6,7 @@
 
 uint8_t convert_to_RTC (uint8_t data);
 
-uint8_t convert_to_RTC_minutes (uint8_t data, uint8_t hrmode);
+uint8_t convert_to_RTC_hours (uint8_t data, uint8_t hrmode);
 
 typedef struct time_structure
     {
