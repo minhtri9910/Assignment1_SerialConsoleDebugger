@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "../../include/kernel/uart.h"
+#include <time.h>
 
 typedef union I2C_control {
     struct
@@ -86,5 +87,9 @@ enum
 void I2C_master_init();
 
 I2C_status_t read_status(void);
+
+unsigned int bcdtod(unsigned int bcd);
+
+unsigned int dtobcd(unsigned int d);
 
 #endif
