@@ -1,7 +1,7 @@
 #include "../../include/kernel/kernel.h"
 
-struct tm t;
-time_t now;
+// struct tm t;
+// time_t now;
 
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
@@ -75,33 +75,54 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
         stop_tx();
         /* Extract data from FIFO and display to console */
         // Store the values read in the tm structure, after masking unimplemented bits.
-        t.tm_sec = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
-        t.tm_min = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
-        t.tm_hour = *(volatile uint32_t *)BSC1_FIFO & 0x3f;
-        t.tm_mday = *(volatile uint32_t *)BSC1_FIFO & 0x3f;
-        t.tm_wday = *(volatile uint32_t *)BSC1_FIFO & 0x07;
-        t.tm_mon = *(volatile uint32_t *)BSC1_FIFO & 0x1f; // 1-12 --> 0-11
-        t.tm_year = *(volatile uint32_t *)BSC1_FIFO;
+        my_time t;
+        t.tm_sec = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
+        t.tm_min = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
+        t.tm_hour = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);
+        t.tm_wday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x07);
+        t.tm_mday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);    
+        t.tm_mon = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x1f); // 1-12 --> 0-11
+        t.tm_year = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO);
 
         if (control == 'r' || control == 'R')
         {
             if (sec_compare != t.tm_sec)
             {
                 sec_compare = t.tm_sec;
-                puts(itoa(t.tm_sec));
+                puts(convert_DAY_from_RTC(t.tm_wday));
                 putc(' ');
-                puts(itoa(t.tm_min));
-                putc(' ');
-                puts(itoa(t.tm_hour));
-                putc(' ');
+                if (t.tm_mday < 10) putc('0');
                 puts(itoa(t.tm_mday));
-                putc(' ');
-                puts(itoa(t.tm_wday));
-                putc(' ');
+                putc('/');
+                if (t.tm_mon < 10) putc('0');
                 puts(itoa(t.tm_mon));
+                putc('/');
+                puts(itoa(t.tm_year + 2019));
                 putc(' ');
-                puts(itoa(t.tm_year));
+                if (t.tm_hour < 10) putc('0');
+                puts(itoa(t.tm_hour));
+                putc(':');
+                if (t.tm_min < 10) putc('0');
+                puts(itoa(t.tm_min));
+                putc(':');
+                if (t.tm_sec < 10) putc('0');
+                puts(itoa(t.tm_sec));
                 putc('\n');
+
+                // puts(itoa(t.tm_sec));
+                // putc(' ');
+                // puts(itoa(t.tm_min));
+                // putc(' ');
+                // puts(itoa(t.tm_hour));
+                // putc(' ');
+                // puts(itoa(t.tm_mday));
+                // putc(' ');
+                // puts(itoa(t.tm_wday));
+                // putc(' ');
+                // puts(itoa(t.tm_mon));
+                // putc(' ');
+                // puts(itoa(t.tm_year));
+                // putc('\n');
             }
             control = mmio_read(UART0_DR);
             if (control != 'p' && control != 'P')

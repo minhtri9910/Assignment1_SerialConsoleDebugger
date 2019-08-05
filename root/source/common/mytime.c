@@ -29,7 +29,7 @@ char * convert_DAY_from_RTC (uint8_t data)
         return "Tuesday";
         break;
     case 3:
-        return "Wedday";
+        return "Wednesday";
         break;
     case 4:
         return "Thursday";
@@ -46,4 +46,5 @@ char * convert_DAY_from_RTC (uint8_t data)
     default:
         break;
     }
+    return "Undefined";
 }
