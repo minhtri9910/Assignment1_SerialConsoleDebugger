@@ -83,7 +83,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
         t.tm_mon = *(volatile uint32_t *)BSC1_FIFO & 0x1f; // 1-12 --> 0-11
         t.tm_year = *(volatile uint32_t *)BSC1_FIFO;
 
-        if (control == 'r')
+        if (control == 'r' || control == 'R')
         {
             if (sec_compare != t.tm_sec)
             {
@@ -104,13 +104,13 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
                 putc('\n');
             }
             control = mmio_read(UART0_DR);
-            if (control != 'p')
+            if (control != 'p' && control != 'P')
                 control = 'r';
         }
-        else if (control == 'p')
+        else if (control == 'p' || control == 'P')
         {
             control = mmio_read(UART0_DR);
-            if (control != 'r')
+            if (control != 'r' && control != 'R')
                 control = 'p';
         }
     }
