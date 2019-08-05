@@ -18,7 +18,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("S3715125: Duong Minh Nhat\n");
     puts("S3426353: Hoang Quoc Dai\n");
 
-    puts("Trial 11\n");
+    puts("Trial 15\n");
 
     //Deliverable 3
     I2C_master_init();
@@ -75,6 +75,9 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
         //Clear DONE
         mmio_write(BSC1_S, (1 << 1));
 
+    //     for (int i = 0; i < 20; i++)
+    // { //for for loop - test only
+        // delay(1000000); //test only
         /* SET REGISTER POINTER */
         //Specify slave address of tinyRTC
         mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
@@ -118,8 +121,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
         mmio_write(BSC1_S, (1 << 1));
 
         /* READ DATA FROM TINYRTC */
-    //         for (int i = 0; i < 20; i++)
-    // { //for for loop
+            
         //Slave address - (already defined above - may be possible to comment out!!)
         mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
 
