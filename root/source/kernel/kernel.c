@@ -1,14 +1,20 @@
 #include "../../include/kernel/kernel.h"
 
-// struct tm t;
-// time_t now;
-
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
     // Declare as unused
     (void)r0;
     (void)r1;
     (void)atags;
+
+    my_time now;
+    now.tm_sec = 0; //Set second
+    now.tm_min = 5; //Set minute
+    now.tm_hour = 12; //Set hour - in 24 hr mode
+    now.tm_mday = 6; //Set date
+    now.tm_wday = 2; //Set day
+    now.tm_mon = 8; //Set month
+    now.tm_year = 0; //start from 2019
 
     gpio_init();
     uart_init();
@@ -22,36 +28,28 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
     puts("DS1307 Real Time Clock Data\n");
     puts("----------------------------\n");
-
+    
     i2c_master_init();
 
     /* COMMUNICATE WITH TINYRTC */
 
     /* WRITE DATA PROCESS */
-    //Clear FIFO before transaction - about FIFO register: page 33 - BCM2837 Manual
+    //Clear FIFO before transaction
     clear_FIFO();
+
     //Data length: 8 bytes to transmit - 1st byte for register address of tinyRTC, the remaining bytes for data
-    //Referenced: Page 8 - DS1307 Manual - Data Write
     mmio_write(BSC1_DLEN, 0x8);
+
     //Write data to transmit to FIFO register
     mmio_write(BSC1_FIFO, 0);    //1st byte: Register address OOH of tinyRTC
 
-    mmio_write(BSC1_FIFO, convert_to_RTC(0)); //Seconds + Clearing CH bit
-    mmio_write(BSC1_FIFO, convert_to_RTC(51)); //Minutes
-    // mmio_write(BSC1_FIFO, 0x39); //Minutes
-    mmio_write(BSC1_FIFO, convert_to_RTC_hours(20,0)); //Hours - 24h mode
-    mmio_write(BSC1_FIFO, convert_to_RTC(1)); //Day
-    mmio_write(BSC1_FIFO, convert_to_RTC(5)); //Date
-    mmio_write(BSC1_FIFO, convert_to_RTC(8)); //Month
-    mmio_write(BSC1_FIFO, convert_to_RTC(0)); //Year - Start from 2019
-
-    // mmio_write(BSC1_FIFO, 0x12); //2nd byte: Clear CH bit in the OOH register address to 0 to enable oscillator
-    // mmio_write(BSC1_FIFO, 0x13);
-    // mmio_write(BSC1_FIFO, 0x82);
-    // mmio_write(BSC1_FIFO, 0x03);
-    // mmio_write(BSC1_FIFO, 0x06);
-    // mmio_write(BSC1_FIFO, 0x08);
-    // mmio_write(BSC1_FIFO, 0x00);
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_sec)); //Seconds + Clearing CH bit
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_min)); //Minutes
+    mmio_write(BSC1_FIFO, convert_to_RTC_hours(now.tm_hour,0)); //Hours - 24h mode
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_wday)); //Day
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_mday)); //Date
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_mon)); //Month
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_year)); //Year 
 
     //Start transfers
     start_tx(0);
@@ -64,7 +62,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     while (1)
     {
         /* SET REGISTER POINTER */
-        //Clear FIFO before transaction - about FIFO register: page 33 - BCM2837 Manual
+        //Clear FIFO before transaction
         clear_FIFO();
         //Data length: 1 byte to transmit - register address of tinyRTC
         mmio_write(BSC1_DLEN, 0x1);
@@ -78,10 +76,10 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
         /*-------------------------------------------------------------------------------------------------------------*/
 
         /* READ DATA FROM TINYRTC */
-        //Clear FIFO before transaction - about FIFO register: page 33 - BCM2837 Manual
+        //Clear FIFO before transaction
         clear_FIFO();
+
         //Data length: 7 bytes to read - seconds, minutes, hours, day, date, month, year
-        //Referenced: page 8 - DS1307 Manual - Data Read
         mmio_write(BSC1_DLEN, 0x7);
         //Start transfer
         start_tx(1);
@@ -103,40 +101,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
             if (sec_compare != t.tm_sec)
             {
                 sec_compare = t.tm_sec;
-                puts(convert_DAY_from_RTC(t.tm_wday));
-                putc(' ');
-                if (t.tm_mday < 10) putc('0');
-                puts(itoa(t.tm_mday));
-                putc('/');
-                if (t.tm_mon < 10) putc('0');
-                puts(itoa(t.tm_mon));
-                putc('/');
-                puts(itoa(t.tm_year + 2019));
-                putc(' ');
-                if (t.tm_hour < 10) putc('0');
-                puts(itoa(t.tm_hour));
-                putc(':');
-                if (t.tm_min < 10) putc('0');
-                puts(itoa(t.tm_min));
-                putc(':');
-                if (t.tm_sec < 10) putc('0');
-                puts(itoa(t.tm_sec));
-                putc('\n');
-
-                // puts(itoa(t.tm_sec));
-                // putc(' ');
-                // puts(itoa(t.tm_min));
-                // putc(' ');
-                // puts(itoa(t.tm_hour));
-                // putc(' ');
-                // puts(itoa(t.tm_mday));
-                // putc(' ');
-                // puts(itoa(t.tm_wday));
-                // putc(' ');
-                // puts(itoa(t.tm_mon));
-                // putc(' ');
-                // puts(itoa(t.tm_year));
-                // putc('\n');
+                display_time(t);
             }
             control = mmio_read(UART0_DR);
             if (control != 'p' && control != 'P')

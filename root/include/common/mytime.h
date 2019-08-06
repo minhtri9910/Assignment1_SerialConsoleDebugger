@@ -4,11 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-uint8_t convert_to_RTC (uint8_t data);
-
-uint8_t convert_to_RTC_hours (uint8_t data, uint8_t hrmode);
-
-typedef struct time_structure
+typedef struct RTC_struct
     {
         uint8_t tm_sec;
         uint8_t tm_min;
@@ -19,9 +15,13 @@ typedef struct time_structure
         uint8_t tm_year;
     } my_time;
 
+uint8_t convert_to_RTC (uint8_t data);
+
+uint8_t convert_to_RTC_hours (uint8_t data, uint8_t hrmode);
+
 uint8_t convert_from_RTC (uint8_t data);
 
 char * convert_DAY_from_RTC (uint8_t data);
 
-void display_time();
+void display_time(my_time t);
 #endif

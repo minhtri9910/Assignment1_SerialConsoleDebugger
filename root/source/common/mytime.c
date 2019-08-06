@@ -1,4 +1,5 @@
 #include "../../include/common/mytime.h"
+#include "../../include/common/stdio.h"
 
 uint8_t convert_to_RTC (uint8_t data)
 {
@@ -47,4 +48,26 @@ char * convert_DAY_from_RTC (uint8_t data)
         break;
     }
     return "Undefined";
+}
+
+void display_time(my_time t){
+    puts(convert_DAY_from_RTC(t.tm_wday));
+    putc(' ');
+    if (t.tm_mday < 10) putc('0');
+    puts(itoa(t.tm_mday));
+    putc('/');
+    if (t.tm_mon < 10) putc('0');
+    puts(itoa(t.tm_mon));
+    putc('/');
+    puts(itoa(t.tm_year + 2019));
+    putc(' ');
+    if (t.tm_hour < 10) putc('0');
+    puts(itoa(t.tm_hour));
+    putc(':');
+    if (t.tm_min < 10) putc('0');
+    puts(itoa(t.tm_min));
+    putc(':');
+    if (t.tm_sec < 10) putc('0');
+    puts(itoa(t.tm_sec));
+    putc('\n');
 }
