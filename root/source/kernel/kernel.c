@@ -99,25 +99,25 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
         t.tm_year = *(volatile uint32_t *)BSC1_FIFO;
 
         puts("Data at address 00H (seconds register): ");
-        puts(itoa(t.tm_sec));
+        puts(itob(t.tm_sec));
         putc('\n');
         puts("Data at address 01H (minutes register): ");
-        puts(itoa(t.tm_min));
+        puts(itob(t.tm_min));
         putc('\n');
         puts("Data at address 02H (hours register): ");
-        puts(itoa(t.tm_hour));
+        puts(itob(t.tm_hour));
         putc('\n');
         puts("Data at address 03H (day register): ");
-        puts(itoa(t.tm_wday));
+        puts(itob(t.tm_wday));
         putc('\n');
         puts("Data at address 04H (date register): ");
-        puts(itoa(t.tm_mday));
+        puts(itob(t.tm_mday));
         putc('\n');
         puts("Data at address 05H (month register): ");
-        puts(itoa(t.tm_mon));
+        puts(itob(t.tm_mon));
         putc('\n');
         puts("Data at address 06H (year register): ");
-        puts(itoa(t.tm_year));
+        puts(itob(t.tm_year));
         putc('\n');
 
         // t.tm_sec = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);

@@ -8,6 +8,8 @@ void bzero(void * dest, int bytes);
 
 char* itoa(int i);
 
+char* itob(int i);
+
 int atoi(char *str);
 
 char* dectohex(int i);

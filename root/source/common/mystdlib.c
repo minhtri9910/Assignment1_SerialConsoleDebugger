@@ -114,6 +114,60 @@ char* dectohex(int i){
     return hexvalue;
 }
 
+char* itob(int i){
+    //sign + 10 digits + '/0' = 12 elements
+    static char cstring[10];
+    int j = 0, isneg = 0;
+
+    if (i==0){
+        cstring[0] = '0';
+        cstring[1] = '0';
+        cstring[2] = '0';
+        cstring[3] = '0';
+        cstring[4] = '0';
+        cstring[5] = '0';
+        cstring[6] = '0';
+        cstring[7] = '0';
+        cstring[8] = '\0';
+        return cstring;
+    }
+
+    //check sign
+    if (i<0){
+        isneg = 1;
+        i = -i;
+    }
+
+    while (i != 0){
+        cstring[j++] = '0' + (i%2); //ASCII value of 'i'
+        i /= 2;
+    }
+
+    while (j < 8){
+        cstring[j++] = '0';
+    }
+
+    //insert sign if negative
+    if (isneg){
+        cstring[j++] = '-';
+    }
+
+    cstring[j] = '\0';
+    j--; //because j is now '\0'
+    i=0;
+
+    //invert
+    while (i<j){ //to swap elements
+        isneg = cstring[i];
+        cstring[i] = cstring[j];
+        cstring[j] = isneg;
+        i++;
+        j--;
+    }
+
+    return cstring;
+}
+
 // Loop <delay> times in a way that the compiler won't optimize away
 //To create a short pause after executing some actions
 void delay(uint32_t count){
