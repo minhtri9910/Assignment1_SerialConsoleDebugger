@@ -8,8 +8,8 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     (void)atags;
 
     my_time now;
-    now.tm_sec = 0; //Set second
-    now.tm_min = 5; //Set minute
+    now.tm_sec = 30; //Set second
+    now.tm_min = 24; //Set minute
     now.tm_hour = 12; //Set hour - in 24 hr mode
     now.tm_mday = 6; //Set date
     now.tm_wday = 2; //Set day
@@ -24,7 +24,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("Assessment Group: 9\n");
     puts("S3726096: Nguyen Minh Tri\n");
     puts("S3715125: Duong Minh Nhat\n");
-    puts("S3426353: Hoang Quoc Dai\n");
+    puts("S3426353: Hoang Quoc Dai\n\n");
 
     puts("DS1307 Real Time Clock Data\n");
     puts("----------------------------\n");
@@ -57,10 +57,10 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     stop_tx();
 
     /*-------------------------------------------------------------------------------------------------------------*/
-    int sec_compare = 0;
-    char control = 'r';
-    while (1)
-    {
+    // int sec_compare = 0;
+    // char control = 'r';
+    // while (1)
+    // {
         /* SET REGISTER POINTER */
         //Clear FIFO before transaction
         clear_FIFO();
@@ -88,30 +88,62 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
         /* Extract data from FIFO and display to console */
         // Store the values read in the tm structure, after masking unimplemented bits.
         my_time t;
-        t.tm_sec = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
-        t.tm_min = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
-        t.tm_hour = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);
-        t.tm_wday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x07);
-        t.tm_mday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);    
-        t.tm_mon = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x1f); // 1-12 --> 0-11
-        t.tm_year = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO);
 
-        if (control == 'r' || control == 'R')
-        {
-            if (sec_compare != t.tm_sec)
-            {
-                sec_compare = t.tm_sec;
-                display_time(t);
-            }
-            control = mmio_read(UART0_DR);
-            if (control != 'p' && control != 'P')
-                control = 'r';
-        }
-        else if (control == 'p' || control == 'P')
-        {
-            control = mmio_read(UART0_DR);
-            if (control != 'r' && control != 'R')
-                control = 'p';
-        }
-    }
+        //Deliverable 3 - START
+        t.tm_sec = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
+        t.tm_min = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
+        t.tm_hour = *(volatile uint32_t *)BSC1_FIFO & 0x3f;
+        t.tm_wday = *(volatile uint32_t *)BSC1_FIFO & 0x07;
+        t.tm_mday = *(volatile uint32_t *)BSC1_FIFO & 0x3f;    
+        t.tm_mon = *(volatile uint32_t *)BSC1_FIFO & 0x1f; // 1-12 --> 0-11
+        t.tm_year = *(volatile uint32_t *)BSC1_FIFO;
+
+        puts("Data at address 00H (seconds register): ");
+        puts(itoa(t.tm_sec));
+        putc('\n');
+        puts("Data at address 01H (minutes register): ");
+        puts(itoa(t.tm_min));
+        putc('\n');
+        puts("Data at address 02H (hours register): ");
+        puts(itoa(t.tm_hour));
+        putc('\n');
+        puts("Data at address 03H (day register): ");
+        puts(itoa(t.tm_wday));
+        putc('\n');
+        puts("Data at address 04H (date register): ");
+        puts(itoa(t.tm_mday));
+        putc('\n');
+        puts("Data at address 05H (month register): ");
+        puts(itoa(t.tm_mon));
+        putc('\n');
+        puts("Data at address 06H (year register): ");
+        puts(itoa(t.tm_year));
+        putc('\n');
+
+        // t.tm_sec = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
+        // t.tm_min = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
+        // t.tm_hour = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);
+        // t.tm_wday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x07);
+        // t.tm_mday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);    
+        // t.tm_mon = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x1f); // 1-12 --> 0-11
+        // t.tm_year = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO);
+        
+        // if (control == 'r' || control == 'R')
+        // {
+        //     if (sec_compare != t.tm_sec)
+        //     {
+        //         sec_compare = t.tm_sec;
+        //         display_time(t);
+        //     }
+        //     control = mmio_read(UART0_DR);
+        //     if (control != 'p' && control != 'P')
+        //         control = 'r';
+        // }
+        // else if (control == 'p' || control == 'P')
+        // {
+        //     control = mmio_read(UART0_DR);
+        //     if (control != 'r' && control != 'R')
+        //         control = 'p';
+        // }
+    // } // bracket for while loop
 }
