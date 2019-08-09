@@ -7,9 +7,9 @@ void spi_init()
 
 spi_control_t read_status(void)
 {
-    spi_control_t status;
+    spi_control_t control;
     status.as_int = mmio_read(SPI_CS);
-    return status;
+    return control;
 }
 
 clear_FIFO()
@@ -34,6 +34,13 @@ start_tx(uint8_t read)
 
 stop_tx()
 {
+    // Wait untill transfer finished
     spi_control_t control; // create spi control
+    do
+    {
+        control = read_status();
+    } while (!(control.DONE));
 
+    // CLear DONE
+    mmio_write(SPI_CS, (1 << 16));
 }
