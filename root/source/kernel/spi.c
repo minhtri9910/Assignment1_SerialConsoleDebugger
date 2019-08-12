@@ -1,5 +1,6 @@
+/*
 #include "spi.h"
-
+]
 void spi_init()
 {
 
@@ -44,3 +45,4 @@ stop_tx()
     // CLear DONE
     mmio_write(SPI_CS, (1 << 16));
 }
+*/

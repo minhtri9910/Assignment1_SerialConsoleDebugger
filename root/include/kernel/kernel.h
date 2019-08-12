@@ -10,6 +10,7 @@
 #include "../../include/common/stdio.h"
 #include "../../include/common/mystdlib.h"
 #include "../../include/common/mytime.h"
+#include "../../include/kernel/spi.h"
 
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags);
 

@@ -8,12 +8,12 @@
 typedef union spi_control {
     struct
     {
-        uint8_t CS : 2;
-        uint8_t CPHA : 1;
-        uint8_t CPOL : 1;
-        uint8_t CLEAR : 2;
-        uint8_t CSPOL : 1;
-        uint8_t TA : 1;
+        uint8_t CS : 2; //Chip select
+        uint8_t CPHA : 1; //Clock phase
+        uint8_t CPOL : 1; //Clock polarity: rest state: 0 for low, 1 for high
+        uint8_t CLEAR : 2;  //Clear FIFO
+        uint8_t CSPOL : 1; //Chip select polarity
+        uint8_t TA : 1;  //Transfer active
         uint8_t DMAEN : 1;
         uint8_t INTD : 1;
         uint8_t INTR : 1;
@@ -22,7 +22,7 @@ typedef union spi_control {
         uint8_t LEN : 1;
         uint8_t LMONO : 1; // Unused
         uint8_t TE_EN : 1; // Unused
-        uint8_t DONE : 1;
+        uint8_t DONE : 1; //T
         uint8_t RXD : 1;
         uint8_t TXD : 1;
         uint8_t RXR : 1;
@@ -39,22 +39,22 @@ typedef union spi_control {
 
 enum
 {
-    SPI_BASE = 0x7E20400,
-    SPI_CS = (SPI_BASE + 0x0),
-    SPI_FIFO = (SPI_BASE + 0x4),
-    SPI_CLK = (SPI_BASE +  0x8),
-    SPI_DLEN = (SPI_BASE + 0xC),
-    SPI_LTOH = (SPI_BASE + 0x10),
-    SPI_DC = (SPI_BASE + 0x14),
-}
+    SPI0_BASE = 0x3F204000, 
+    SPI0_CS = (SPI0_BASE + 0x00),
+    SPI0_FIFO = (SPI0_BASE + 0x04),
+    SPI0_CLK = (SPI0_BASE +  0x08),
+    SPI0_DLEN = (SPI0_BASE + 0x0C),
+    SPI0_LTOH = (SPI0_BASE + 0x10),
+    SPI0_DC = (SPI0_BASE + 0x14),
+};
 
 
-spi_control_t read_status(void);
+// spi_control_t read_status(void);
 
-void clear_FIFO();
+// void clear_FIFO();
 
-void start_tx(uint8_t read);
+// void start_tx(uint8_t read);
 
-void stop_tx();
+// void stop_tx();
 
 #endif
