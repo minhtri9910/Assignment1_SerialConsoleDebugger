@@ -22,7 +22,7 @@ typedef union spi_control {
         uint8_t LEN : 1;
         uint8_t LMONO : 1; // Unused
         uint8_t TE_EN : 1; // Unused
-        uint8_t DONE : 1; //T
+        uint8_t DONE : 1;
         uint8_t RXD : 1;
         uint8_t TXD : 1;
         uint8_t RXR : 1;

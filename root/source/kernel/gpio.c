@@ -26,5 +26,9 @@ void gpio_init()
     mmio_write(GPPUDCLK0, 0x00000000);
 
     //Set alternative function 0 (ALT0) for GPIO2 and GPIO3
-    mmio_write(GPFSEL0, 0x00000900);
+    // mmio_write(GPFSEL0, 0x00000900);
+
+    // Set ALT0 for GPIO2,3,7,8,9,10,11 and GPIO14,15 (UART)
+    mmio_write(GPFSEL0, 0x24800900);
+    mmio_write(GPFSEL1, 0x00024024);
 }

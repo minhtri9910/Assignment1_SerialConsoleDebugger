@@ -9,6 +9,7 @@ enum
 {
     GPIO_BASE = 0x3F200000,
     GPFSEL0 = GPIO_BASE, //GPIO function select
+    GPFSEL1 = GPIO_BASE + 0x04, 
     GPPUD = (GPIO_BASE + 0x94),
     GPPUDCLK0 = (GPIO_BASE + 0x98),
 };
