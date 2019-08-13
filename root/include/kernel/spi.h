@@ -56,5 +56,10 @@ enum
 // void start_tx(uint8_t read);
 
 // void stop_tx();
+void spi_start_tx();
+
+void poll();
+
+// void spi_stop_tx();
 
 #endif
