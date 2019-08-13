@@ -19,7 +19,7 @@ uint8_t convert_from_RTC (uint8_t data)
     return (((data & 0x70) >> 4) * 10 + (data & 0x0F));
 }
 
-char * convert_DAY_from_RTC (uint8_t data)
+char * convert_wday (uint8_t data)
 {
     switch (data)
     {
@@ -51,7 +51,15 @@ char * convert_DAY_from_RTC (uint8_t data)
 }
 
 void display_time(my_time t){
-    puts(convert_DAY_from_RTC(t.tm_wday));
+    t.tm_sec = convert_from_RTC(t.tm_sec);
+    t.tm_min = convert_from_RTC(t.tm_min);
+    t.tm_hour = convert_from_RTC(t.tm_hour);
+    t.tm_wday = convert_from_RTC(t.tm_wday);
+    t.tm_mday = convert_from_RTC(t.tm_mday);
+    t.tm_mon = convert_from_RTC(t.tm_mon); // 1-12 --> 0-11
+    t.tm_year = convert_from_RTC(t.tm_year);
+
+    puts(convert_wday(t.tm_wday));
     putc(' ');
     if (t.tm_mday < 10) putc('0');
     puts(itoa(t.tm_mday));
@@ -59,7 +67,7 @@ void display_time(my_time t){
     if (t.tm_mon < 10) putc('0');
     puts(itoa(t.tm_mon));
     putc('/');
-    puts(itoa(t.tm_year + 2019));
+    puts(itoa(t.tm_year + 19));
     putc(' ');
     if (t.tm_hour < 10) putc('0');
     puts(itoa(t.tm_hour));

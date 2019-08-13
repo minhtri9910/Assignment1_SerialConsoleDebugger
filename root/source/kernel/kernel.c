@@ -20,7 +20,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("DS1307 Real Time Clock Data\n");
     puts("----------------------------\n");
 
-    puts("Trial 3\n");
+    puts("Trial 4\n");
     
     // //Step 1: Set config.text: dtparam=spi=on - DONE
 
@@ -162,14 +162,24 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
             stop_tx();
             /* Extract data from FIFO and display to console */
             // Store the values read in the tm structure, after masking unimplemented bits.
+
+            // my_time t;
+            // t.tm_sec = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
+            // t.tm_min = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
+            // t.tm_hour = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);
+            // t.tm_wday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x07);
+            // t.tm_mday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);
+            // t.tm_mon = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x1f); // 1-12 --> 0-11
+            // t.tm_year = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO);
+
             my_time t;
-            t.tm_sec = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
-            t.tm_min = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x7f);
-            t.tm_hour = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);
-            t.tm_wday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x07);
-            t.tm_mday = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x3f);
-            t.tm_mon = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO & 0x1f); // 1-12 --> 0-11
-            t.tm_year = convert_from_RTC(*(volatile uint32_t *)BSC1_FIFO);
+            t.tm_sec = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
+            t.tm_min = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
+            t.tm_hour = *(volatile uint32_t *)BSC1_FIFO & 0x3f;
+            t.tm_wday = *(volatile uint32_t *)BSC1_FIFO & 0x07;
+            t.tm_mday = *(volatile uint32_t *)BSC1_FIFO & 0x3f;
+            t.tm_mon = *(volatile uint32_t *)BSC1_FIFO & 0x1f; // 1-12 --> 0-11
+            t.tm_year = *(volatile uint32_t *)BSC1_FIFO;
 
             if (sec_compare != t.tm_sec)
             {
