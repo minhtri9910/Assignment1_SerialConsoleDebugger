@@ -20,7 +20,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("DS1307 Real Time Clock Data\n");
     puts("----------------------------\n");
 
-    puts("Trial 4\n");
+    puts("Trial 12\n");
     
     // //Step 1: Set config.text: dtparam=spi=on - DONE
 
@@ -97,37 +97,37 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 
     /* COMMUNICATE WITH TINYRTC */
     i2c_master_init();
-    // my_time now;
-    // now.tm_sec = 0;   //Set second
-    // now.tm_min = 8;   //Set minute
-    // now.tm_hour = 13; //Set hour - in 24 hr mode
-    // now.tm_mday = 7;  //Set date
-    // now.tm_wday = 4;  //Set day
-    // now.tm_mon = 8;   //Set month
-    // now.tm_year = 0;  //start from 2019
+    my_time now;
+    now.tm_sec = 0;   //Set second
+    now.tm_min = 10;   //Set minute
+    now.tm_hour = 2; //Set hour - in 24 hr mode
+    now.tm_mday = 13;  //Set date
+    now.tm_wday = 2;  //Set day
+    now.tm_mon = 8;   //Set month
+    now.tm_year = 0;  //start from 2019
 
-    // /* WRITE DATA PROCESS */
-    // //Clear FIFO before transaction
-    // clear_FIFO();
+    /* WRITE DATA PROCESS */
+    //Clear FIFO before transaction
+    clear_FIFO();
 
-    // //Data length: 8 bytes to transmit - 1st byte for register address of tinyRTC, the remaining bytes for data
-    // mmio_write(BSC1_DLEN, 0x8);
+    //Data length: 8 bytes to transmit - 1st byte for register address of tinyRTC, the remaining bytes for data
+    mmio_write(BSC1_DLEN, 0x8);
 
-    // //Write data to transmit to FIFO register
-    // mmio_write(BSC1_FIFO, 0); //1st byte: Register address OOH of tinyRTC
+    //Write data to transmit to FIFO register
+    mmio_write(BSC1_FIFO, 0); //1st byte: Register address OOH of tinyRTC
 
-    // mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_sec));           //Seconds + Clearing CH bit
-    // mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_min));           //Minutes
-    // mmio_write(BSC1_FIFO, convert_to_RTC_hours(now.tm_hour, 0)); //Hours - 24h mode
-    // mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_wday));          //Day
-    // mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_mday));          //Date
-    // mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_mon));           //Month
-    // mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_year));          //Year
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_sec));           //Seconds + Clearing CH bit
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_min));           //Minutes
+    mmio_write(BSC1_FIFO, convert_to_RTC_hours(now.tm_hour, 2)); //Hours - 24h mode
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_wday));          //Day
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_mday));          //Date
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_mon));           //Month
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_year));          //Year
 
-    // //Start transfers
-    // start_tx(0);
-    // //Wait until transfer finished
-    // stop_tx();
+    //Start transfers
+    start_tx(0);
+    //Wait until transfer finished
+    stop_tx();
 
     /*-------------------------------------------------------------------------------------------------------------*/
     int sec_compare = 0;
@@ -175,7 +175,8 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
             my_time t;
             t.tm_sec = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
             t.tm_min = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
-            t.tm_hour = *(volatile uint32_t *)BSC1_FIFO & 0x3f;
+            // t.tm_hour = *(volatile uint32_t *)BSC1_FIFO & 0x3f;
+            t.tm_hour = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
             t.tm_wday = *(volatile uint32_t *)BSC1_FIFO & 0x07;
             t.tm_mday = *(volatile uint32_t *)BSC1_FIFO & 0x3f;
             t.tm_mon = *(volatile uint32_t *)BSC1_FIFO & 0x1f; // 1-12 --> 0-11
@@ -185,6 +186,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
             {
                 sec_compare = t.tm_sec;
                 display_time(t);
+                // puts(itoa(t.tm_hour));
             }
             control = mmio_read(UART0_DR);
             if (control != 'p' && control != 'P')
