@@ -29,8 +29,8 @@ typedef union spi_control {
         uint8_t RXF : 1;
         uint8_t CSPOL0 : 1;
         uint8_t CSPOL1 : 1;
-        uint8_t DMA_LEN : 1;
         uint8_t CSPOL2 : 1;
+        uint8_t DMA_LEN : 1;
         uint8_t LEN_LONG : 1;
         uint8_t padding : 6;
     };
