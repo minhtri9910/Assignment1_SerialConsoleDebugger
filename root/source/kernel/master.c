@@ -1,19 +1,20 @@
 #include "../../include/kernel/master.h"
 
-
 void i2c_master_init()
 {
     //Specify slave address of tinyRTC
     mmio_write(BSC1_A, 0x68); // Slave address = 110 1000
 }
 
-I2C_status_t read_status(void) {
-        I2C_status_t status;
-        status.as_int = mmio_read(BSC1_S);
-        return status;
+I2C_status_t read_status(void)
+{
+    I2C_status_t status;
+    status.as_int = mmio_read(BSC1_S);
+    return status;
 }
 
-void clear_FIFO(){
+void clear_FIFO()
+{
     I2C_control_t control; //Create master controller
     bzero(&control, 4);
     mmio_write(BSC1_C, control.as_int); //Set all to 0
@@ -23,7 +24,8 @@ void clear_FIFO(){
     mmio_write(BSC1_C, control.as_int);
 }
 
-void start_tx(uint8_t read){
+void start_tx(uint8_t read)
+{
     I2C_control_t control; //Create master controller
     //Zero out control again
     bzero(&control, 4);
@@ -37,7 +39,8 @@ void start_tx(uint8_t read){
     mmio_write(BSC1_C, control.as_int);
 }
 
-void stop_tx(){
+void stop_tx()
+{
     //Wait until transfer finished
     I2C_status_t status;
     do
@@ -48,3 +51,4 @@ void stop_tx(){
     //Clear DONE
     mmio_write(BSC1_S, (1 << 1));
 }
+

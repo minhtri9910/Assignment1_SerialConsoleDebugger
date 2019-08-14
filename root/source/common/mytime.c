@@ -162,3 +162,53 @@ void toggle_time(int *hrmode, uint8_t hour)
     //Wait until transfer finished
     stop_tx();
 }
+
+void write_I2C_time(my_time now, int hrmode)
+{
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_sec)); //Seconds + Clearing CH bit
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_min)); //Minutes
+    mmio_write(BSC1_FIFO, convert_to_RTC_hours(now.tm_hour, hrmode)); //Hours - 24h mode
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_wday));               //Day
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_mday));               //Date
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_mon));                //Month
+    mmio_write(BSC1_FIFO, convert_to_RTC(now.tm_year));
+}
+
+my_time read_I2C_time()
+{
+    my_time t;
+    t.tm_sec = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
+    t.tm_min = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
+    t.tm_hour = *(volatile uint32_t *)BSC1_FIFO & 0x7f;
+    t.tm_wday = *(volatile uint32_t *)BSC1_FIFO & 0x07;
+    t.tm_mday = *(volatile uint32_t *)BSC1_FIFO & 0x3f;
+    t.tm_mon = *(volatile uint32_t *)BSC1_FIFO & 0x1f; // 1-12 --> 0-11
+    t.tm_year = *(volatile uint32_t *)BSC1_FIFO;
+
+    return t;
+}
+
+void write_SPI_time(my_time t)
+{
+    mmio_write(SPI0_FIFO, t.tm_sec);
+    mmio_write(SPI0_FIFO, t.tm_min);
+    mmio_write(SPI0_FIFO, t.tm_hour);
+    mmio_write(SPI0_FIFO, t.tm_wday);
+    mmio_write(SPI0_FIFO, t.tm_mday);
+    mmio_write(SPI0_FIFO, t.tm_mon);
+    mmio_write(SPI0_FIFO, t.tm_year);
+}
+
+my_time read_SPI_time()
+{
+    my_time t;
+    t.tm_sec = *(volatile uint32_t *)SPI0_FIFO;
+    t.tm_min = *(volatile uint32_t *)SPI0_FIFO;
+    t.tm_hour = *(volatile uint32_t *)SPI0_FIFO;
+    t.tm_wday = *(volatile uint32_t *)SPI0_FIFO;
+    t.tm_mday = *(volatile uint32_t *)SPI0_FIFO;
+    t.tm_mon = *(volatile uint32_t *)SPI0_FIFO;
+    t.tm_year = *(volatile uint32_t *)SPI0_FIFO;
+
+    return t;
+}

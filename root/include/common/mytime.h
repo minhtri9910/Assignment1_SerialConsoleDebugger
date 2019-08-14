@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "../kernel/master.h"
+#include "../kernel/spi.h"
 
 typedef struct RTC_struct
 {
@@ -27,4 +28,13 @@ char *convert_DAY_from_RTC(uint8_t data);
 void display_time(my_time t);
 
 void toggle_time(int *hrmode, uint8_t hour);
+
+void write_I2C_time(my_time now, int hrmode);
+
+my_time read_I2C_time();
+
+void write_SPI_time(my_time t);
+
+my_time read_SPI_time();
+
 #endif

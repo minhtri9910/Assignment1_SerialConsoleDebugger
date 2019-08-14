@@ -4,7 +4,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "../../include/kernel/uart.h"
-#include <time.h>
 
 typedef union I2C_control {
     struct
