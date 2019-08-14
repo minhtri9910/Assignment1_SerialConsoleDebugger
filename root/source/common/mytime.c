@@ -1,25 +1,28 @@
 #include "../../include/common/mytime.h"
 #include "../../include/common/stdio.h"
 
-uint8_t convert_to_RTC (uint8_t data)
+uint8_t convert_to_RTC(uint8_t data)
 {
-    return (((data/10) << 4) + (data % 10));
+    return (((data / 10) << 4) + (data % 10));
 }
 
 //write 0 to hrmode to enable 24 hour, 1 for 12hr am, 2 for 12hr pm
-uint8_t convert_to_RTC_hours (uint8_t data, uint8_t hrmode)
+uint8_t convert_to_RTC_hours(uint8_t data, uint8_t hrmode)
 {
-    if (hrmode == 1) return ((1 << 6) + ((data/10) << 4) + (data % 10));
-    else if (hrmode == 2) return ((1 << 6) + (1 << 5) + ((data/10) << 4) + (data % 10));
-    else return ((data/10 << 4) + (data % 10));
+    if (hrmode == 1)
+        return ((1 << 6) + ((data / 10) << 4) + (data % 10));
+    else if (hrmode == 2)
+        return ((1 << 6) + (1 << 5) + ((data / 10) << 4) + (data % 10));
+    else
+        return ((data / 10 << 4) + (data % 10));
 }
 
-uint8_t convert_from_RTC (uint8_t data)
+uint8_t convert_from_RTC(uint8_t data)
 {
     return (((data & 0x70) >> 4) * 10 + (data & 0x0F)); //Limit year*10 to 3-bit
 }
 
-char * convert_wday (uint8_t data)
+char *convert_wday(uint8_t data)
 {
     switch (data)
     {
@@ -50,7 +53,8 @@ char * convert_wday (uint8_t data)
     return "Undefined";
 }
 
-void display_time(my_time t){
+void display_time(my_time t)
+{
     int hrmode, am_pm;
 
     t.tm_sec = convert_from_RTC(t.tm_sec);
@@ -66,10 +70,12 @@ void display_time(my_time t){
 
     puts(convert_wday(t.tm_wday));
     putc(' ');
-    if (t.tm_mday < 10) putc('0');
+    if (t.tm_mday < 10)
+        putc('0');
     puts(itoa(t.tm_mday));
     putc('/');
-    if (t.tm_mon < 10) putc('0');
+    if (t.tm_mon < 10)
+        putc('0');
     puts(itoa(t.tm_mon));
     putc('/');
     puts(itoa(t.tm_year + 19));
@@ -81,34 +87,78 @@ void display_time(my_time t){
 
     hrmode = t.tm_hour & (1 << 6);
 
-    if (hrmode == 0) {
+    if (hrmode == 0)
+    {
         t.tm_hour = convert_from_RTC(t.tm_hour);
-        if (t.tm_hour < 10) putc('0');
+        if (t.tm_hour < 10)
+            putc('0');
         puts(itoa(t.tm_hour));
         putc(':');
-    } else {
+    }
+    else
+    {
         //Borrow t.tm_mday to be 12hrmode flag
         am_pm = ((t.tm_hour & (1 << 5)) == 0);
 
         t.tm_hour = (((t.tm_hour & 0x10) >> 4) * 10 + (t.tm_hour & 0x0F));
-        if (t.tm_hour < 10) putc('0');
+        if (t.tm_hour < 10)
+            putc('0');
         puts(itoa(t.tm_hour));
         putc(':');
     }
 
-
-    if (t.tm_min < 10) putc('0');
+    if (t.tm_min < 10)
+        putc('0');
     puts(itoa(t.tm_min));
     putc(':');
-    if (t.tm_sec < 10) putc('0');
+    if (t.tm_sec < 10)
+        putc('0');
     puts(itoa(t.tm_sec));
     // putc('\n');
 
-    if (hrmode != 0){
-        if (am_pm == 0) puts(" PM");
-        else (puts(" AM"));
+    if (hrmode != 0)
+    {
+        if (am_pm == 0)
+            puts(" PM");
+        else
+            (puts(" AM"));
     }
 
     putc('\n');
+}
 
+void toggle_time(int *hrmode, uint8_t hour)
+{
+    if (*hrmode == 0)
+    {
+        hour = convert_from_RTC(hour);
+        if (hour >= 12)
+        {
+            *hrmode = 2;
+            hour -= 12;
+        }
+        else
+            *hrmode = 1;
+    }
+    else
+    {
+        *hrmode = 0;
+        int am_pm = (hour & (1 << 5));
+        hour = (((hour & 0x10) >> 4) * 10 + (hour & 0x0F));
+        if (am_pm != 0)
+            hour += 12;
+    }
+
+    //WRITE HOUR TO RTC
+    //Clear FIFO before transaction
+    clear_FIFO();
+    //Data length: 1 byte to transmit - register address of tinyRTC
+    mmio_write(BSC1_DLEN, 0x2);
+    //Write data to transmit to FIFO register
+    mmio_write(BSC1_FIFO, 0x2);                                 //1st byte: Register address OOH of tinyRTC
+    mmio_write(BSC1_FIFO, convert_to_RTC_hours(hour, *hrmode)); //Hours
+    //Start transfer
+    start_tx(0);
+    //Wait until transfer finished
+    stop_tx();
 }

@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "../kernel/master.h"
 
 typedef struct RTC_struct
 {
@@ -24,4 +25,6 @@ uint8_t convert_from_RTC(uint8_t data);
 char *convert_DAY_from_RTC(uint8_t data);
 
 void display_time(my_time t);
+
+void toggle_time(int *hrmode, uint8_t hour);
 #endif
