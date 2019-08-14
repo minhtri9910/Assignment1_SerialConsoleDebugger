@@ -37,6 +37,8 @@ typedef union spi_control {
     uint32_t as_int;
 } spi_control_t;
 
+
+
 enum
 {
     SPI0_BASE = 0x3F204000, 
@@ -48,18 +50,8 @@ enum
     SPI0_DC = (SPI0_BASE + 0x14),
 };
 
-
-// spi_control_t read_status(void);
-
-// void clear_FIFO();
-
-// void start_tx(uint8_t read);
-
-// void stop_tx();
 void spi_start_tx();
 
 void poll();
-
-// void spi_stop_tx();
 
 #endif

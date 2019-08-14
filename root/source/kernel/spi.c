@@ -1,6 +1,7 @@
 
 #include "../../include/kernel/spi.h"
 
+
 void spi_start_tx()
 {
     spi_control_t spi_ctrl;
@@ -28,7 +29,6 @@ void poll()
     } while (!spi_ctrl.DONE);
 
     bzero(&spi_ctrl, 4);
-
     spi_ctrl.TA = 0;
     mmio_write(SPI0_CS, spi_ctrl.as_int); //Set TA back to 0
 }
