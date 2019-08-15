@@ -5,7 +5,7 @@
 void spi_start_tx()
 {
     spi_control_t spi_ctrl;
-    bzero(&spi_ctrl, 4);
+    spi_ctrl.as_int = mmio_read(SPI0_CS);
     spi_ctrl.CS = 0;
     spi_ctrl.CPHA = 0;
     spi_ctrl.CPOL = 0;

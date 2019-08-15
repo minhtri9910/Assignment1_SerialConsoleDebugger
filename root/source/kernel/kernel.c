@@ -18,12 +18,11 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("S3426353: Hoang Quoc Dai\n\n");
     puts("DS1307 Real Time Clock Data\n");
     puts("----------------------------\n");
-    puts("Trial 4\n");
 
     /* COMMUNICATE WITH TINYRTC */
     i2c_master_init();
     my_time now;
-    now.tm_sec = 30;  //Set second
+    now.tm_sec = 10;  //Set second
     now.tm_min = 45;  //Set minute
     now.tm_hour = 11; //Set hour - in 24 hr mode
     now.tm_mday = 7;  //Set date
@@ -46,6 +45,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     stop_tx();
 
     /*-------------------------------------------------------------------------------------------------------------*/
+
     int sec_compare = 0;
     char control = 'r';
     while (1)
