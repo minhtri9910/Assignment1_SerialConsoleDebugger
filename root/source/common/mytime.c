@@ -78,7 +78,7 @@ void display_time(my_time t)
         putc('0');
     puts(itoa(t.tm_mon));
     putc('/');
-    puts(itoa(t.tm_year + 19));
+    puts(itoa(t.tm_year));
     putc(' ');
 
     // if (t.tm_hour < 10) putc('0');

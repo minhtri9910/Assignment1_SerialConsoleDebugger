@@ -28,9 +28,10 @@ void poll()
 
     } while (!spi_ctrl.DONE);
 
+    //Set TA back to 0
     bzero(&spi_ctrl, 4);
     spi_ctrl.TA = 0;
-    mmio_write(SPI0_CS, spi_ctrl.as_int); //Set TA back to 0
+    mmio_write(SPI0_CS, spi_ctrl.as_int); 
 }
 
 

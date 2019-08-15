@@ -16,19 +16,20 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     puts("S3726096: Nguyen Minh Tri\n");
     puts("S3715125: Duong Minh Nhat\n");
     puts("S3426353: Hoang Quoc Dai\n\n");
+
     puts("DS1307 Real Time Clock Data\n");
     puts("----------------------------\n");
 
     /* COMMUNICATE WITH TINYRTC */
     i2c_master_init();
     my_time now;
-    now.tm_sec = 10;  //Set second
-    now.tm_min = 45;  //Set minute
-    now.tm_hour = 11; //Set hour - in 24 hr mode
-    now.tm_mday = 7;  //Set date
+    now.tm_sec = 0;  //Set second
+    now.tm_min = 44;  //Set minute
+    now.tm_hour = 22; //Set hour - in 24 hr mode
+    now.tm_mday = 15;  //Set date
     now.tm_wday = 4;  //Set day
     now.tm_mon = 8;   //Set month
-    now.tm_year = 0;  //start from 2019
+    now.tm_year = 19;  //start from 2000
 
     /* WRITE DATA PROCESS */
     //Clear FIFO before transaction
@@ -37,7 +38,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     mmio_write(BSC1_DLEN, 0x8);
     //Write data to transmit to FIFO register
     mmio_write(BSC1_FIFO, 0); //1st byte: Register address OOH of tinyRTC
-    int hrmode = 2;
+    int hrmode = 0;
     write_I2C_time(now, hrmode);
     //Start transfers
     start_tx(0);
@@ -45,7 +46,6 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     stop_tx();
 
     /*-------------------------------------------------------------------------------------------------------------*/
-
     int sec_compare = 0;
     char control = 'r';
     while (1)
